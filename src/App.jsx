@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { MapPin, Calendar, Copy, Check, Phone, MessageCircle, Instagram } from 'lucide-react';
+import { MapPin, Calendar, Copy, Check, Phone, MessageCircle } from 'lucide-react';
 
 const BASE_URL = "https://inviteutsav.com/wp-content/themes/inviteutsav/assets/templates/siyaram-raghukul/images";
 
@@ -853,21 +853,26 @@ export default function App() {
           </div>
         </div>
 
+{/* Footer */}
         <footer className="relative z-10 mt-10 bg-white/85 backdrop-blur-sm px-6 py-3 rounded-full border border-[#d4af37]/40 flex items-center gap-4 text-xs text-[#4a0d0d] shadow-sm">
           <p>
-            <a href="https://inviteutsav.com/" target="_blank" rel="noopener noreferrer" className="hover:underline">
-              Crafted with <span aria-hidden="true" className="text-red-600">❤</span> by InviteUtsav
+            <a href="https://axiomforgeco.org/" target="_blank" rel="noopener noreferrer" className="hover:underline">
+              Crafted with <span aria-hidden="true" className="text-red-600">❤</span> by Saurabh Maurya (axiomforgeco)
             </a>
           </p>
           <div className="flex items-center gap-2 border-l border-amber-900/20 pl-3">
             <a
-              aria-label="InviteUtsav on Instagram"
-              href="https://www.instagram.com/inviteutsav/"
+              aria-label="Saurabh on Instagram"
+              href="https://www.instagram.com/m.saurabh__/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#801b1b] hover:scale-110 transition"
             >
-              <Instagram size={16} />
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+              </svg>
             </a>
             <a
               aria-label="Message InviteUtsav on WhatsApp"
