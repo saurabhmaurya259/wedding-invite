@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { AnimatePresence, motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
-import { MapPin, Calendar, Copy, Check, Phone } from 'lucide-react';
+import { MapPin, Calendar, Copy, Check, Phone, MessageCircle } from 'lucide-react';
 
 const BASE_URL = "https://inviteutsav.com/wp-content/themes/inviteutsav/assets/templates/siyaram-raghukul/images";
 
