@@ -558,8 +558,8 @@ export default function App() {
           src="/wedding-art/hero-temple.webp"
           alt="A bride and groom walking towards an ornate temple through a flower-filled garden"
           fetchPriority="high"
-          initial={{ opacity: 0, scale: 1.08 }}
-          animate={{ opacity: isOpen ? 1 : 0, scale: isOpen ? 1 : 1.08 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isOpen ? 1 : 0 }}
           style={{ y: heroImageY, scale: heroImageScale }}
           transition={{ duration: 1.8, delay: 0.25, ease: "easeOut" }}
           className="absolute inset-0 z-[1] h-full w-full object-cover object-center md:left-1/2 md:right-auto md:w-auto md:max-w-[96vw] md:-translate-x-1/2 md:object-contain"
