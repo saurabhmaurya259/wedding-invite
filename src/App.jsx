@@ -547,23 +547,21 @@ export default function App() {
         aria-label="Wedding invitation opening"
         className="relative isolate h-[100svh] min-h-[680px] max-h-[1040px] w-full overflow-hidden flex items-start justify-center bg-[#f6e5ca]"
       >
-        {/* Soft, blurred artwork fills wide desktop screens while the full portrait scene stays visible in the centre. */}
-        <img
-          src="/wedding-art/hero-temple.webp"
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl opacity-35"
-        />
-        <motion.img
-          src="/wedding-art/hero-temple.webp"
-          alt="A bride and groom walking towards an ornate temple through a flower-filled garden"
-          fetchPriority="high"
+        <motion.picture
           initial={{ opacity: 0 }}
           animate={{ opacity: isOpen ? 1 : 0 }}
           style={{ y: heroImageY, scale: heroImageScale }}
           transition={{ duration: 1.8, delay: 0.25, ease: "easeOut" }}
-          className="absolute inset-0 z-[1] h-full w-full object-cover object-center md:left-1/2 md:right-auto md:w-auto md:max-w-[96vw] md:-translate-x-1/2 md:object-contain"
-        />
+          className="absolute inset-0 z-[1] h-full w-full pointer-events-none"
+        >
+          <source media="(min-width: 1024px)" srcSet="/wedding-art/hero-temple-desktop.webp" />
+          <img
+            src="/wedding-art/hero-temple.webp"
+            alt="A bride and groom walking towards an ornate temple through a flower-filled garden"
+            fetchPriority="high"
+            className="h-full w-full object-cover object-center"
+          />
+        </motion.picture>
         <div
           aria-hidden="true"
           className="absolute inset-x-0 top-0 z-[2] h-[42%] bg-gradient-to-b from-[#fff4df]/35 via-[#fff4df]/10 to-transparent pointer-events-none"
@@ -574,15 +572,15 @@ export default function App() {
           animate={{ opacity: isOpen ? 1 : 0, y: isOpen ? 0 : 24 }}
           transition={{ duration: 1.1, delay: 0.85, ease: "easeOut" }}
           style={{ y: titleY }}
-          className="absolute top-[12%] sm:top-[13%] z-20 w-full px-4 text-center select-none pointer-events-none"
+          className="absolute top-[12%] sm:top-[13%] md:top-[6%] z-20 w-full px-4 text-center select-none pointer-events-none"
         >
           <p className="mb-2 text-[9px] sm:text-xs uppercase tracking-[0.28em] font-semibold text-[#8b4b22] drop-shadow-sm">
             Together with their families
           </p>
           <h1 className="flex flex-col items-center font-script text-[#6d171d] drop-shadow-[0_2px_10px_rgba(255,247,230,0.85)] leading-[0.88]">
-            <span className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl">Muskan</span>
-            <span className="my-1 font-serif text-2xl sm:text-3xl md:text-4xl text-[#b88428]">&amp;</span>
-            <span className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl">Devesh</span>
+            <span className="text-6xl sm:text-7xl md:text-6xl lg:text-7xl">Muskan</span>
+            <span className="my-1 font-serif text-2xl sm:text-3xl md:text-3xl text-[#b88428]">&amp;</span>
+            <span className="text-6xl sm:text-7xl md:text-6xl lg:text-7xl">Devesh</span>
           </h1>
           <p className="mt-3 text-[9px] sm:text-xs uppercase tracking-[0.24em] text-[#87542d] font-semibold">
             01 — 02 December 2026
@@ -663,7 +661,7 @@ export default function App() {
       {/* ========================================================= */}
       <section
         aria-label="Meet the couple"
-        className="relative w-full py-14 sm:py-20 px-4 flex flex-col items-center justify-center text-center overflow-hidden"
+        className="relative w-full py-14 sm:py-20 px-4 flex flex-col items-center justify-center text-center overflow-hidden lg:flex-row lg:flex-wrap lg:items-center lg:justify-center lg:gap-8 lg:px-8"
       >
         <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,#fff8e9_0%,#f8e9d2_55%,#f4e0c2_100%)]" />
 
@@ -704,7 +702,7 @@ export default function App() {
           </div>
         </Card3D>
 
-        <Card3D className="relative z-10 w-full max-w-xl mx-auto">
+        <Card3D className="relative z-10 w-full max-w-xl mx-auto lg:w-[36%] lg:max-w-[420px] lg:mx-0">
           <div className="bg-white/88 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-[#d4af37]/50 shadow-xl">
             <h2 className="mb-2 leading-tight">
               <span className="text-base sm:text-xl italic block text-amber-900">Meet the</span>
@@ -721,14 +719,17 @@ export default function App() {
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, amount: 0.18 }}
           transition={{ duration: 1.05, ease: "easeOut" }}
-          className="relative z-10 mt-5 w-full max-w-4xl overflow-hidden rounded-[28px] shadow-[0_22px_55px_rgba(88,34,18,0.18)]"
+          className="relative z-10 mt-5 w-full max-w-4xl overflow-hidden rounded-[28px] shadow-[0_22px_55px_rgba(88,34,18,0.18)] lg:mt-0 lg:flex-1 lg:max-w-[760px]"
         >
-          <img
-            src="/wedding-art/mandap-stage.webp"
-            alt="A flower-covered wedding mandap with red velvet drapes and a ceremonial sofa"
-            loading="lazy"
-            className="block h-auto w-full object-cover"
-          />
+          <picture>
+            <source media="(min-width: 1024px)" srcSet="/wedding-art/mandap-stage-desktop.webp" />
+            <img
+              src="/wedding-art/mandap-stage.webp"
+              alt="A flower-covered wedding mandap with red velvet drapes and a ceremonial sofa"
+              loading="lazy"
+              className="block h-auto w-full object-cover"
+            />
+          </picture>
           <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#5b2018]/15 to-transparent pointer-events-none" />
         </motion.div>
       </section>
@@ -759,7 +760,7 @@ export default function App() {
               <li key={ev.id} className="flex">
                 <Card3D className="w-full flex">
                   <div className="w-full bg-white/90 backdrop-blur-md p-2.5 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border-2 border-[#d4af37]/50 shadow-[0_14px_34px_rgba(74,13,13,0.14)] flex flex-col items-center justify-between text-center">
-                    <div className="relative w-24 h-24 sm:w-44 sm:h-44 md:w-52 md:h-52 flex flex-col items-center justify-center mb-2 sm:mb-4 animate-float-3d">
+                    <div className="relative w-24 h-24 sm:w-36 sm:h-36 md:w-40 md:h-40 flex flex-col items-center justify-center mb-2 sm:mb-3 animate-float-3d">
                       <img
                         src={`${BASE_URL}/events/event-card-frame.webp`}
                         draggable="false"
@@ -887,7 +888,7 @@ export default function App() {
       {/* ========================================================= */}
       <section
         aria-label="Venue and RSVP"
-        className="relative w-full py-14 sm:py-20 px-4 bg-[#fdf1e2] overflow-hidden flex flex-col items-center justify-center gap-3 sm:gap-5"
+        className="relative w-full py-14 sm:py-20 px-4 bg-[#fdf1e2] overflow-hidden flex flex-col items-center justify-center gap-3 sm:gap-5 md:flex-row md:items-stretch md:gap-6 md:px-8"
       >
         {[
           'top-8 left-[8%]',
@@ -907,8 +908,8 @@ export default function App() {
           </span>
         ))}
 
-        <Card3D className="relative z-10 w-full max-w-lg mx-auto my-4">
-          <div className="bg-white/88 backdrop-blur-md p-6 sm:p-8 rounded-3xl border-2 border-[#d4af37]/50 shadow-xl">
+        <Card3D className="relative z-10 w-full max-w-lg mx-auto my-4 md:my-0 md:w-[36%] md:max-w-[410px] md:mx-0">
+          <div className="h-full bg-white/88 backdrop-blur-md p-6 sm:p-8 rounded-3xl border-2 border-[#d4af37]/50 shadow-xl">
             <h2 className="font-script text-4xl sm:text-5xl text-[#801b1b] mb-2">
               We look forward to welcoming you
             </h2>
@@ -931,7 +932,7 @@ export default function App() {
           </div>
         </Card3D>
 
-        <Card3D className="relative z-10 w-full max-w-[540px]">
+        <Card3D className="relative z-10 w-full max-w-[540px] md:flex-1 md:max-w-[680px]">
           <div className="bg-white rounded-[28px] shadow-[0_18px_50px_rgba(107,45,20,0.12)] p-6 sm:p-9 text-left font-sans border border-[#f3cfc6]/40">
             <h2 className="text-xl sm:text-[26px] font-bold text-[#4a1515] text-center mb-5 font-serif">
               Kindly let us know you are coming
@@ -1082,16 +1083,16 @@ export default function App() {
       {/* ========================================================= */}
       <section
         aria-label="Wedding countdown"
-        className="relative w-full py-14 sm:py-20 px-4 flex flex-col items-center justify-between text-center overflow-hidden"
+        className="relative w-full min-h-[760px] lg:min-h-[820px] py-14 sm:py-20 px-4 flex flex-col items-center justify-between text-center overflow-hidden"
       >
         <div className="absolute inset-0 pointer-events-none bg-[#f8e9d2]">
           <img
             src="/wedding-art/elephant-countdown.webp"
             draggable="false"
-            className="absolute inset-x-0 bottom-0 h-[58%] w-full object-cover object-center sm:h-[64%]"
+            className="absolute inset-x-0 bottom-0 h-[58%] w-full object-cover object-center sm:h-[64%] lg:h-[78%]"
             alt=""
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#fff7e8] via-[#fff7e8]/65 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#fff7e8] via-[#fff7e8]/50 to-transparent" />
         </div>
 
         {/* Feature 4: 3D Flip Countdown Cards */}
