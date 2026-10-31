@@ -661,7 +661,7 @@ export default function App() {
       {/* ========================================================= */}
       <section
         aria-label="Meet the couple"
-        className="relative w-full py-14 sm:py-20 px-4 flex flex-col items-center justify-center text-center overflow-hidden lg:flex-row lg:flex-wrap lg:items-center lg:justify-center lg:gap-8 lg:px-8"
+        className="relative w-full py-14 sm:py-20 px-4 flex flex-col items-center justify-center text-center overflow-hidden"
       >
         <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,#fff8e9_0%,#f8e9d2_55%,#f4e0c2_100%)]" />
 
@@ -702,6 +702,7 @@ export default function App() {
           </div>
         </Card3D>
 
+        <div className="relative z-10 mt-5 flex w-full flex-col items-center gap-5 lg:flex-row lg:items-center lg:justify-center lg:gap-8 lg:px-8">
         <Card3D className="relative z-10 w-full max-w-xl mx-auto lg:w-[36%] lg:max-w-[420px] lg:mx-0">
           <div className="bg-white/88 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-[#d4af37]/50 shadow-xl">
             <h2 className="mb-2 leading-tight">
@@ -732,6 +733,7 @@ export default function App() {
           </picture>
           <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#5b2018]/15 to-transparent pointer-events-none" />
         </motion.div>
+        </div>
       </section>
 
       {/* ========================================================= */}
@@ -1086,12 +1088,15 @@ export default function App() {
         className="relative w-full min-h-[760px] lg:min-h-[820px] py-14 sm:py-20 px-4 flex flex-col items-center justify-between text-center overflow-hidden"
       >
         <div className="absolute inset-0 pointer-events-none bg-[#f8e9d2]">
-          <img
-            src="/wedding-art/elephant-countdown.webp"
-            draggable="false"
-            className="absolute inset-x-0 bottom-0 h-[58%] w-full object-cover object-center sm:h-[64%] lg:h-[78%]"
-            alt=""
-          />
+          <picture>
+            <source media="(min-width: 1024px)" srcSet="/wedding-art/elephant-countdown-desktop.webp" />
+            <img
+              src="/wedding-art/elephant-countdown.webp"
+              draggable="false"
+              className="absolute inset-x-0 bottom-0 h-[58%] w-full object-cover object-center sm:h-[64%] lg:h-[78%]"
+              alt=""
+            />
+          </picture>
           <div className="absolute inset-0 bg-gradient-to-b from-[#fff7e8] via-[#fff7e8]/50 to-transparent" />
         </div>
 
