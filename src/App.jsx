@@ -5,15 +5,15 @@ import { MapPin, Calendar, Copy, Check, Phone, MessageCircle } from 'lucide-reac
 const BASE_URL = "https://inviteutsav.com/wp-content/themes/inviteutsav/assets/templates/siyaram-raghukul/images";
 
 // ============================================================================
-// 1. 3D INTERACTIVE CARD WRAPPER (TILT + DEPTH POP EFFECT)
+// 1. 3D INTERACTIVE CARD WRAPPER
 // ============================================================================
 function Card3D({ children, className = "" }) {
   const ref = useRef(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [8, -8]), { stiffness: 200, damping: 20 });
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-8, 8]), { stiffness: 200, damping: 20 });
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [7, -7]), { stiffness: 200, damping: 20 });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-7, 7]), { stiffness: 200, damping: 20 });
 
   const handleMove = (e) => {
     if (!ref.current) return;
@@ -36,10 +36,10 @@ function Card3D({ children, className = "" }) {
       onMouseLeave={resetTilt}
       onTouchMove={handleMove}
       onTouchEnd={resetTilt}
-      initial={{ opacity: 0, y: 35, scale: 0.95, rotateX: 10 }}
+      initial={{ opacity: 0, y: 30, scale: 0.96, rotateX: 8 }}
       whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
-      viewport={{ once: false, amount: 0.2 }}
-      transition={{ duration: 0.65, ease: "easeOut" }}
+      viewport={{ once: false, amount: 0.15 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
       style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
       className={`perspective-1000 ${className}`}
     >
@@ -67,13 +67,13 @@ function ParticleCanvas() {
     resize();
     window.addEventListener('resize', resize);
 
-    const particles = Array.from({ length: 30 }, () => ({
+    const particles = Array.from({ length: 34 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      r: Math.random() * 3 + 1.2,
-      speedY: Math.random() * 0.5 + 0.25,
-      speedX: (Math.random() - 0.5) * 0.4,
-      alpha: Math.random() * 0.65 + 0.25,
+      r: Math.random() * 3.2 + 1.2,
+      speedY: Math.random() * 0.55 + 0.25,
+      speedX: (Math.random() - 0.5) * 0.45,
+      alpha: Math.random() * 0.65 + 0.3,
     }));
 
     const render = () => {
@@ -87,9 +87,9 @@ function ParticleCanvas() {
 
         ctx.save();
         ctx.globalAlpha = p.alpha;
-        ctx.fillStyle = '#e6c665';
+        ctx.fillStyle = '#ffdf73';
         ctx.shadowColor = '#d4af37';
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 10;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
@@ -109,11 +109,46 @@ function ParticleCanvas() {
 }
 
 // ============================================================================
-// 3. HEART-SHAPED 3D SCRATCH-OFF COMPONENT
+// 3. FEATURE 2: GOLD CONFETTI & MARIGOLD PETAL BURST ON DATE SCRATCH
 // ============================================================================
-function ScratchHeart({ label, value }) {
+function ConfettiBurst({ active }) {
+  if (!active) return null;
+  const particles = Array.from({ length: 45 });
+  return (
+    <div className="absolute inset-0 pointer-events-none z-30 overflow-hidden flex items-center justify-center">
+      {particles.map((_, i) => {
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 180 + 50;
+        const color = ['#d4af37', '#ff6b6b', '#ffdf73', '#e65c00', '#fff'][i % 5];
+        return (
+          <motion.div
+            key={i}
+            initial={{ x: 0, y: 0, scale: 0, opacity: 1 }}
+            animate={{
+              x: Math.cos(angle) * distance,
+              y: Math.sin(angle) * distance - 40,
+              scale: [0, 1.2, 0.8],
+              opacity: [1, 1, 0],
+              rotate: Math.random() * 360,
+            }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+            style={{ backgroundColor: color }}
+            className="absolute w-3 h-3 rounded-full"
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+// ============================================================================
+// 4. LARGER, EASY-TO-SCRATCH 3D HEART COMPONENT
+// ============================================================================
+function ScratchHeart({ label, value, onReveal }) {
   const canvasRef = useRef(null);
   const [isScratching, setIsScratching] = useState(false);
+  const [isRevealed, setIsRevealed] = useState(false);
+  const scratchCountRef = useRef(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -138,23 +173,30 @@ function ScratchHeart({ label, value }) {
 
     const grad = ctx.createLinearGradient(0, 0, w, h);
     grad.addColorStop(0, '#c59b27');
-    grad.addColorStop(0.5, '#f6e7b2');
+    grad.addColorStop(0.5, '#fff1be');
     grad.addColorStop(1, '#9b7012');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
 
     ctx.fillStyle = '#5a1807';
-    ctx.font = 'bold 11px "Playfair Display", serif';
+    ctx.font = 'bold 13px "Playfair Display", serif';
     ctx.textAlign = 'center';
-    ctx.fillText('SCRATCH', w / 2, h * 0.43);
-    ctx.font = '10px "Playfair Display", serif';
+    ctx.fillText('SCRATCH', w / 2, h * 0.42);
+    ctx.font = 'bold 11px "Playfair Display", serif';
     ctx.fillText(label.toUpperCase(), w / 2, h * 0.56);
 
     ctx.restore();
   }, [label]);
 
+  const triggerReveal = () => {
+    if (!isRevealed) {
+      setIsRevealed(true);
+      if (onReveal) onReveal();
+    }
+  };
+
   const scratch = (e) => {
-    if (!isScratching) return;
+    if (!isScratching || isRevealed) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -170,14 +212,19 @@ function ScratchHeart({ label, value }) {
 
     ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();
-    ctx.arc(x, y, 20, 0, Math.PI * 2);
+    ctx.arc(x, y, 38, 0, Math.PI * 2);
     ctx.fill();
+
+    scratchCountRef.current += 1;
+    if (scratchCountRef.current > 10) {
+      triggerReveal();
+    }
   };
 
   return (
     <motion.div
-      whileHover={{ scale: 1.06, rotateZ: 2 }}
-      className="relative w-24 h-24 sm:w-30 sm:h-30 flex flex-col items-center justify-center select-none drop-shadow-[0_10px_15px_rgba(90,24,7,0.2)]"
+      whileHover={{ scale: 1.07 }}
+      className="relative w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 flex flex-col items-center justify-center select-none drop-shadow-[0_12px_20px_rgba(90,24,7,0.22)]"
     >
       <svg viewBox="0 0 120 120" className="absolute inset-0 w-full h-full">
         <path
@@ -189,15 +236,18 @@ function ScratchHeart({ label, value }) {
       </svg>
 
       <div className="relative z-0 flex flex-col items-center justify-center -mt-2">
-        <span className="text-[9px] sm:text-xs uppercase tracking-widest text-amber-800 font-semibold">{label}</span>
-        <span className="text-lg sm:text-2xl font-bold text-[#5a1807] leading-tight">{value}</span>
+        <span className="text-[10px] sm:text-xs uppercase tracking-widest text-amber-800 font-bold">{label}</span>
+        <span className="text-2xl sm:text-4xl font-bold text-[#5a1807] leading-tight mt-0.5">{value}</span>
       </div>
 
       <canvas
         ref={canvasRef}
-        width={128}
-        height={128}
-        className="absolute inset-0 w-full h-full cursor-pointer z-10 touch-none"
+        width={160}
+        height={160}
+        onClick={triggerReveal}
+        className={`absolute inset-0 w-full h-full cursor-pointer z-10 touch-none transition-opacity duration-500 ${
+          isRevealed ? 'opacity-0 pointer-events-none' : 'opacity-100'
+        }`}
         onMouseDown={() => setIsScratching(true)}
         onMouseUp={() => setIsScratching(false)}
         onMouseLeave={() => setIsScratching(false)}
@@ -214,13 +264,17 @@ function ScratchHeart({ label, value }) {
 }
 
 // ============================================================================
-// 4. MAIN APPLICATION
+// 5. MAIN APPLICATION
 // ============================================================================
 export default function App() {
+  // Feature 1: Royal Curtain Gate State (defaults to false so guest sees gate first)
+  const [isOpen, setIsOpen] = useState(false);
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [copied, setCopied] = useState(false);
   const [openCalendarId, setOpenCalendarId] = useState(null);
   const [timeLeft, setTimeLeft] = useState({ days: '00', hours: '00', minutes: '00', seconds: '00' });
+  const [showConfetti, setShowConfetti] = useState(false);
 
   // RSVP State
   const [rsvpName, setRsvpName] = useState('');
@@ -234,12 +288,23 @@ export default function App() {
   const audioRef = useRef(null);
   const { scrollY } = useScroll();
 
-  // Multi-layer 3D Parallax Scroll Transforms for Hero
-  const sunY = useTransform(scrollY, [0, 700], [0, 180]);
-  const mountainY = useTransform(scrollY, [0, 700], [0, 110]);
-  const cloudY = useTransform(scrollY, [0, 700], [0, 75]);
-  const templeScale = useTransform(scrollY, [0, 700], [1, 1.08]);
-  const titleY = useTransform(scrollY, [0, 500], [0, 140]);
+  // 3D Multi-plane Parallax Transforms for Ram Mandir Hero
+  const sunY = useTransform(scrollY, [0, 700], [0, 160]);
+  const mountainY = useTransform(scrollY, [0, 700], [0, 95]);
+  const cloudY = useTransform(scrollY, [0, 700], [0, 60]);
+  const templeScale = useTransform(scrollY, [0, 700], [1.04, 1.16]);
+  const templeY = useTransform(scrollY, [0, 700], [0, 35]);
+  const titleY = useTransform(scrollY, [0, 500], [0, 110]);
+
+  // Feature 1: Handle Opening the Invitation Gate & Auto-playing Audio
+  const handleOpenInvitation = () => {
+    setIsOpen(true);
+    if (audioRef.current) {
+      audioRef.current.play().then(() => {
+        setIsPlaying(true);
+      }).catch((e) => console.log("Audio autoplay prevented:", e));
+    }
+  };
 
   const toggleAudio = () => {
     if (!audioRef.current) return;
@@ -249,6 +314,31 @@ export default function App() {
       audioRef.current.play();
     }
     setIsPlaying(!isPlaying);
+  };
+
+  // Feature 3: Interactive Temple Bell Chime Audio Synthesizer on Tap
+  const playBellChime = () => {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, ctx.currentTime); // High A note bell chime
+      osc.frequency.exponentialRampToValueAtTime(220, ctx.currentTime + 1.5);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 1.5);
+    } catch (e) {
+      console.log("AudioContext not supported");
+    }
+  };
+
+  const triggerConfetti = () => {
+    setShowConfetti(true);
+    setTimeout(() => setShowConfetti(false), 3000);
   };
 
   const toggleEventPill = (eventName) => {
@@ -330,7 +420,6 @@ export default function App() {
       icsEnd: "20261201T210000Z",
       gcal: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Sangeet&dates=20261201T190000Z/20261201T210000Z&details=https://muskanwedsdevesh.inviteutsav.com/&location=Ps+Club+Royale,+Raipur,+Chhattisgarh",
       outlook: "https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=Sangeet&startdt=2026-12-01T19:00:00+00:00&enddt=2026-12-01T21:00:00+00:00&location=Ps+Club+Royale,+Raipur",
-      side: "left",
     },
     {
       id: 2,
@@ -344,7 +433,6 @@ export default function App() {
       icsEnd: "20261202T130000Z",
       gcal: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Haldi&dates=20261202T110000Z/20261202T130000Z&details=https://muskanwedsdevesh.inviteutsav.com/&location=Ps+Club+Royale,+Raipur,+Chhattisgarh",
       outlook: "https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=Haldi&startdt=2026-12-02T11:00:00+00:00&enddt=2026-12-02T13:00:00+00:00&location=Ps+Club+Royale,+Raipur",
-      side: "right",
     },
     {
       id: 3,
@@ -358,24 +446,72 @@ export default function App() {
       icsEnd: "20261202T200000Z",
       gcal: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Wedding&dates=20261202T180000Z/20261202T200000Z&details=https://muskanwedsdevesh.inviteutsav.com/&location=Ps+Club+Royale,+Raipur,+Chhattisgarh",
       outlook: "https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=Wedding&startdt=2026-12-02T18:00:00+00:00&enddt=2026-12-02T20:00:00+00:00&location=Ps+Club+Royale,+Raipur",
-      side: "left",
     },
   ];
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden font-serif bg-[#fdf5ea] text-[#4a0d0d]">
+    <div className="min-h-screen w-full overflow-x-hidden font-serif bg-[#fdf5ea] text-[#4a0d0d] relative">
       <audio
         ref={audioRef}
         loop
-        preload="none"
+        preload="auto"
         src="https://inviteutsav.com/wp-content/themes/inviteutsav/assets/music/marriage/marriage-music-004.mp3"
       />
+
+      {/* ========================================================= */}
+      {/* FEATURE 1: 3D ROYAL CURTAIN GATE / ENVELOPE OPENING       */}
+      {/* ========================================================= */}
+      {!isOpen && (
+        <motion.div
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0, scale: 1.08 }}
+          transition={{ duration: 0.9, ease: "easeInOut" }}
+          className="fixed inset-0 z-50 bg-[#4a0d0d] flex flex-col items-center justify-center p-6 text-center overflow-hidden"
+        >
+          {/* Ornate Royal Background Frame */}
+          <div className="absolute inset-4 sm:inset-8 border-2 border-[#d4af37]/60 rounded-3xl pointer-events-none flex items-center justify-center">
+            <div className="absolute inset-2 border border-[#d4af37]/30 rounded-2xl" />
+          </div>
+
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+            className="relative z-10 flex flex-col items-center max-w-md mx-auto"
+          >
+            <span className="text-xs uppercase tracking-[0.3em] text-[#d4af37] font-semibold mb-3">
+              You Are Cordially Invited To The Wedding Of
+            </span>
+
+            <h2 className="font-script text-6xl sm:text-7xl md:text-8xl text-[#fffdf9] drop-shadow-md my-2">
+              Muskan
+            </h2>
+            <span className="font-serif italic text-3xl text-[#d4af37] my-1">&amp;</span>
+            <h2 className="font-script text-6xl sm:text-7xl md:text-8xl text-[#fffdf9] drop-shadow-md my-2">
+              Devesh
+            </h2>
+
+            <p className="text-xs sm:text-sm text-amber-100/80 italic font-serif mt-4 mb-8">
+              Tap below to enter our wedding celebration &amp; turn on auspicious music
+            </p>
+
+            <motion.button
+              whileHover={{ scale: 1.06 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleOpenInvitation}
+              className="px-8 py-4 rounded-full bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#c59b27] text-[#4a0d0d] font-bold text-sm sm:text-base uppercase tracking-widest shadow-[0_10px_30px_rgba(212,175,55,0.4)] cursor-pointer"
+            >
+              Open Invitation ✨
+            </motion.button>
+          </motion.div>
+        </motion.div>
+      )}
 
       {/* Floating Bottom-Right Equalizer Button */}
       <button
         onClick={toggleAudio}
         aria-label="Toggle wedding music"
-        className="fixed bottom-5 right-5 z-50 w-12 h-12 rounded-full bg-[#6b2d14] hover:bg-[#52210e] text-white shadow-2xl flex items-center justify-center gap-[3px] cursor-pointer transition-transform active:scale-95"
+        className="fixed bottom-5 right-5 z-40 w-12 h-12 rounded-full bg-[#6b2d14] hover:bg-[#52210e] text-white shadow-2xl flex items-center justify-center gap-[3px] cursor-pointer transition-transform active:scale-95"
       >
         {[0, 0.2, 0.4, 0.15].map((delay, idx) => (
           <span
@@ -390,16 +526,21 @@ export default function App() {
       </button>
 
       {/* ========================================================= */}
-      {/* SECTION 1: 3D PARALLAX HERO OPENING                       */}
+      {/* SECTION 1: 3D RAM MANDIR HERO OPENING                     */}
       {/* ========================================================= */}
       <section
         aria-label="Wedding invitation opening"
-        className="relative h-[100svh] min-h-[620px] w-full overflow-hidden flex flex-col items-center justify-center perspective-1000"
+        className="relative h-[100svh] min-h-[650px] w-full overflow-hidden flex flex-col items-center justify-start pt-24 sm:pt-28 md:pt-32 perspective-1000"
       >
         <picture className="absolute inset-0 w-full h-full pointer-events-none">
           <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/hero-sky-desktop.webp`} />
           <img src={`${BASE_URL}/backgrounds/hero-sky-mobile.webp`} draggable="false" className="w-full h-full object-cover" alt="" />
         </picture>
+
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 bottom-0 h-[75%] pointer-events-none bg-[radial-gradient(circle_at_50%_75%,rgba(255,215,100,0.55),rgba(255,165,60,0.2)_50%,transparent_75%)]"
+        />
 
         <motion.picture style={{ y: sunY }} className="absolute inset-0 w-full h-full pointer-events-none">
           <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/hero-sun-desktop.webp`} />
@@ -413,48 +554,73 @@ export default function App() {
 
         <motion.picture style={{ y: cloudY }} className="absolute inset-0 w-full h-full pointer-events-none">
           <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/hero-cloud-desktop.webp`} />
-          <img src={`${BASE_URL}/backgrounds/hero-cloud-mobile.webp`} draggable="false" className="w-full h-full object-cover object-bottom opacity-90" alt="" />
+          <img src={`${BASE_URL}/backgrounds/hero-cloud-mobile.webp`} draggable="false" className="w-full h-full object-cover object-bottom opacity-85" alt="" />
         </motion.picture>
 
-        <motion.picture style={{ scale: templeScale }} className="absolute inset-0 w-full h-full pointer-events-none origin-bottom">
+        <motion.picture
+          style={{ scale: templeScale, y: templeY }}
+          className="absolute inset-x-0 bottom-0 h-[68%] sm:h-[78%] w-full pointer-events-none origin-bottom z-5"
+        >
           <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/hero-temple-desktop.webp`} />
-          <img src={`${BASE_URL}/backgrounds/hero-temple-mobile.webp`} draggable="false" className="w-full h-full object-cover object-bottom drop-shadow-2xl" alt="" />
+          <img
+            src={`${BASE_URL}/backgrounds/hero-temple-mobile.webp`}
+            draggable="false"
+            className="w-full h-full object-cover object-bottom contrast-110 saturate-115 drop-shadow-[0_-12px_35px_rgba(212,175,55,0.45)]"
+            alt="Ram Mandir"
+          />
         </motion.picture>
 
-        <picture className="absolute inset-0 w-full h-full pointer-events-none">
+        <picture className="absolute inset-0 w-full h-full pointer-events-none z-6">
           <source media="(min-width:1024px)" srcSet={`${BASE_URL}/decorations/temple-flagpole-desktop.webp`} />
-          <img src={`${BASE_URL}/decorations/temple-flagpole-mobile.webp`} draggable="false" className="w-full h-full object-contain object-bottom" alt="" />
+          <img
+            src={`${BASE_URL}/decorations/temple-flagpole-mobile.webp`}
+            draggable="false"
+            className="w-full h-full object-contain object-bottom drop-shadow-md"
+            alt=""
+          />
         </picture>
 
-        <picture className="absolute top-0 inset-x-0 z-10 w-full pointer-events-none drop-shadow-xl">
+        <picture className="absolute top-0 inset-x-0 z-20 w-full pointer-events-none drop-shadow-xl">
           <source media="(min-width:1024px)" srcSet={`${BASE_URL}/decorations/bells-frame-desktop.webp`} />
           <img src={`${BASE_URL}/decorations/bells-frame-mobile.webp`} draggable="false" className="w-full object-cover" alt="" />
         </picture>
 
-        {/* 6 Swinging Temple Bells */}
-        <img src={`${BASE_URL}/decorations/hanging-bell-a.webp`} draggable="false" className="absolute top-8 sm:top-12 left-[8%] w-6 sm:w-10 z-10 animate-swing pointer-events-none drop-shadow-md" alt="" />
-        <img src={`${BASE_URL}/decorations/hanging-bell-b.webp`} draggable="false" className="absolute top-12 sm:top-16 left-[18%] w-4 sm:w-7 z-10 animate-swing-delayed pointer-events-none drop-shadow-md" alt="" />
-        <img src={`${BASE_URL}/decorations/hanging-bell-b.webp`} draggable="false" className="absolute top-6 sm:top-10 left-[30%] w-4 sm:w-6 z-10 animate-swing pointer-events-none drop-shadow-md" alt="" />
-        <img src={`${BASE_URL}/decorations/hanging-bell-b.webp`} draggable="false" className="absolute top-6 sm:top-10 right-[30%] w-4 sm:w-6 z-10 animate-swing-delayed pointer-events-none drop-shadow-md" alt="" />
-        <img src={`${BASE_URL}/decorations/hanging-bell-b.webp`} draggable="false" className="absolute top-12 sm:top-16 right-[18%] w-4 sm:w-7 z-10 animate-swing pointer-events-none drop-shadow-md" alt="" />
-        <img src={`${BASE_URL}/decorations/hanging-bell-a.webp`} draggable="false" className="absolute top-8 sm:top-12 right-[8%] w-6 sm:w-10 z-10 animate-swing-delayed pointer-events-none drop-shadow-md" alt="" />
+        {/* Feature 3: Interactive Chime Bells on Tap */}
+        {[
+          { src: `${BASE_URL}/decorations/hanging-bell-a.webp`, className: "absolute top-2 sm:top-4 left-[4%] sm:left-[6%] w-7 sm:w-11 z-20 animate-swing pointer-events-auto cursor-pointer drop-shadow-lg" },
+          { src: `${BASE_URL}/decorations/hanging-bell-b.webp`, className: "absolute top-4 sm:top-8 left-[14%] sm:left-[15%] w-5 sm:w-8 z-20 animate-swing-delayed pointer-events-auto cursor-pointer drop-shadow-md" },
+          { src: `${BASE_URL}/decorations/hanging-bell-b.webp`, className: "absolute top-1 sm:top-3 left-[24%] sm:left-[24%] w-4 sm:w-6 z-20 animate-swing pointer-events-auto cursor-pointer drop-shadow-md" },
+          { src: `${BASE_URL}/decorations/hanging-bell-b.webp`, className: "absolute top-1 sm:top-3 right-[24%] sm:right-[24%] w-4 sm:w-6 z-20 animate-swing-delayed pointer-events-auto cursor-pointer drop-shadow-md" },
+          { src: `${BASE_URL}/decorations/hanging-bell-b.webp`, className: "absolute top-4 sm:top-8 right-[14%] sm:right-[15%] w-5 sm:w-8 z-20 animate-swing pointer-events-auto cursor-pointer drop-shadow-md" },
+          { src: `${BASE_URL}/decorations/hanging-bell-a.webp`, className: "absolute top-2 sm:top-4 right-[4%] sm:right-[6%] w-7 sm:w-11 z-20 animate-swing-delayed pointer-events-auto cursor-pointer drop-shadow-lg" },
+        ].map((bell, i) => (
+          <img
+            key={i}
+            src={bell.src}
+            draggable="false"
+            onClick={playBellChime}
+            className={bell.className}
+            title="Tap to ring temple bell"
+            alt="Temple Bell"
+          />
+        ))}
 
         <ParticleCanvas />
 
         <motion.h1
           style={{ y: titleY }}
-          initial={{ opacity: 0, scale: 0.85, rotateX: 20 }}
-          animate={{ opacity: 1, scale: 1, rotateX: 0 }}
+          initial={{ opacity: 0, scale: 0.88, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1.1, ease: "easeOut" }}
-          className="relative z-20 text-center flex flex-col items-center -mt-10 sm:-mt-16 select-none px-4"
+          className="relative z-25 text-center flex flex-col items-center select-none px-4 mt-4 sm:mt-6"
         >
-          <span className="font-script text-6xl sm:text-8xl md:text-9xl text-[#4a0d0d] drop-shadow-[0_4px_12px_rgba(255,255,255,0.85)] leading-none">
+          <span className="font-script text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-[#4a0d0d] drop-shadow-[0_3px_14px_rgba(255,253,245,0.95)] leading-none">
             Muskan
           </span>
-          <span className="font-serif italic text-3xl sm:text-5xl md:text-6xl text-[#c59b27] my-1 sm:my-2 drop-shadow-sm">
+          <span className="font-serif italic text-2xl sm:text-4xl md:text-5xl text-[#b8860b] my-1 drop-shadow-[0_2px_8px_rgba(255,255,255,0.9)]">
             &amp;
           </span>
-          <span className="font-script text-6xl sm:text-8xl md:text-9xl text-[#4a0d0d] drop-shadow-[0_4px_12px_rgba(255,255,255,0.85)] leading-none">
+          <span className="font-script text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-[#4a0d0d] drop-shadow-[0_3px_14px_rgba(255,253,245,0.95)] leading-none">
             Devesh
           </span>
         </motion.h1>
@@ -504,7 +670,7 @@ export default function App() {
       </section>
 
       {/* ========================================================= */}
-      {/* SECTION 3: MEET THE COUPLE & 3D SCRATCH HEARTS            */}
+      {/* SECTION 3: MEET THE COUPLE & CONFETTI SCRATCH HEARTS      */}
       {/* ========================================================= */}
       <section
         aria-label="Meet the couple"
@@ -528,25 +694,25 @@ export default function App() {
           alt=""
         />
 
-        <Card3D className="relative z-10 w-full max-w-xl mx-auto mb-8">
-          <div className="bg-white/88 backdrop-blur-md p-6 sm:p-9 rounded-3xl border-2 border-[#d4af37]/50 shadow-[0_20px_50px_rgba(74,13,13,0.16)]">
-            <p className="font-script text-4xl sm:text-5xl text-[#801b1b] mb-1">A Date To Remember</p>
-            <p className="text-[10px] sm:text-xs uppercase tracking-widest text-amber-800 mb-4">
-              Scratch each heart to reveal our wedding date
+        <Card3D className="relative z-10 w-full max-w-2xl mx-auto mb-8">
+          <div className="bg-white/88 backdrop-blur-md p-6 sm:p-10 rounded-3xl border-2 border-[#d4af37]/50 shadow-[0_20px_50px_rgba(74,13,13,0.16)] relative">
+            <ConfettiBurst active={showConfetti} />
+            <p className="font-script text-4xl sm:text-6xl text-[#801b1b] mb-1">A Date To Remember</p>
+            <p className="text-[11px] sm:text-xs uppercase tracking-widest text-amber-800 mb-5">
+              Scratch or tap each heart to reveal our wedding date
             </p>
 
-            {/* Always on the same horizontal row on mobile & desktop */}
             <div
               aria-label="Scratch each heart to reveal our wedding date"
               role="group"
-              className="flex flex-row items-center justify-center gap-2 sm:gap-6 my-3"
+              className="flex flex-row items-center justify-center gap-3 sm:gap-8 my-4"
             >
-              <ScratchHeart label="Day" value="2" />
-              <ScratchHeart label="Month" value="DEC" />
-              <ScratchHeart label="Year" value="2026" />
+              <ScratchHeart label="Day" value="2" onReveal={triggerConfetti} />
+              <ScratchHeart label="Month" value="DEC" onReveal={triggerConfetti} />
+              <ScratchHeart label="Year" value="2026" onReveal={triggerConfetti} />
             </div>
 
-            <p className="text-xs sm:text-sm text-[#4a0d0d] leading-relaxed mt-3">
+            <p className="text-xs sm:text-base text-[#4a0d0d] leading-relaxed mt-4">
               Mark your calendars — our forever begins on this joyous day, and we would be honoured to have you by our side.
             </p>
           </div>
@@ -566,146 +732,120 @@ export default function App() {
       </section>
 
       {/* ========================================================= */}
-      {/* SECTION 4: COMPACT SIDE-BY-SIDE 3D WEDDING TIMELINE       */}
+      {/* SECTION 4: ALL 3 CELEBRATIONS IN A SINGLE HORIZONTAL ROW  */}
       {/* ========================================================= */}
-      <section aria-label="Wedding timeline" className="relative w-full py-14 sm:py-20 px-3 sm:px-6 overflow-hidden">
+      <section aria-label="Wedding timeline" className="relative w-full py-14 sm:py-20 px-2 sm:px-6 overflow-hidden">
         <picture className="absolute inset-0 w-full h-full pointer-events-none">
           <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/timeline-paper-mobile.webp`} />
           <img src={`${BASE_URL}/backgrounds/timeline-paper-mobile.webp`} draggable="false" className="w-full h-full object-cover opacity-95" alt="" />
         </picture>
 
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
+        <div className="relative z-10 max-w-6xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
             <h2 className="font-script text-5xl sm:text-6xl text-[#801b1b] mb-1">Our Celebrations</h2>
-            <p className="text-xs sm:text-base italic text-amber-900 mb-8 sm:mb-10">
+            <p className="text-xs sm:text-base italic text-amber-900 mb-8 sm:mb-12">
               Save these dates, we would love to celebrate with you
             </p>
           </motion.div>
 
-          {/* Compact Connected Timeline List */}
-          <div className="relative">
-            {/* Central Vertical Golden Timeline Spine */}
-            <div className="hidden sm:block absolute left-1/2 top-6 bottom-6 w-[2px] -translate-x-1/2 bg-gradient-to-b from-transparent via-[#d4af37] to-transparent" />
-
-            <ol className="space-y-5 sm:space-y-6">
-              {events.map((ev, index) => (
-                <li key={ev.id} className="relative">
-                  <img
-                    src={`${BASE_URL}/decorations/pillar-ornament-${ev.side}.webp`}
-                    draggable="false"
-                    className={`hidden lg:block absolute top-1/2 -translate-y-1/2 w-20 opacity-65 pointer-events-none ${
-                      ev.side === 'left' ? '-left-10' : '-right-10'
-                    }`}
-                    alt=""
-                  />
-
-                  <Card3D className="w-full">
-                    {/* Same-Line Row Card on Mobile & Desktop */}
-                    <div
-                      className={`flex flex-row items-center justify-between gap-3 sm:gap-6 bg-white/90 backdrop-blur-md p-3.5 sm:p-5 rounded-3xl border-2 border-[#d4af37]/45 shadow-[0_12px_32px_rgba(74,13,13,0.12)] ${
-                        index % 2 === 1 ? 'sm:flex-row-reverse' : ''
-                      }`}
-                    >
-                      {/* Left: 3D Ornate Event Frame Badge */}
-                      <div className="relative w-32 h-32 sm:w-48 sm:h-48 shrink-0 flex flex-col items-center justify-center animate-float-3d">
-                        <img
-                          src={`${BASE_URL}/events/event-card-frame.webp`}
-                          draggable="false"
-                          className="absolute inset-0 w-full h-full object-contain pointer-events-none drop-shadow-md"
-                          alt=""
-                        />
-                        <div className="relative z-10 flex flex-col items-center text-center px-2">
-                          <span className="text-[8px] sm:text-xs uppercase tracking-wider text-amber-900 font-bold">
-                            {ev.date}
-                          </span>
-                          <h3 className="font-script text-2xl sm:text-4xl text-[#801b1b] my-0.5 leading-none">
-                            {ev.title}
-                          </h3>
-                          <span className="text-[9px] sm:text-xs font-bold text-[#4a0d0d]">{ev.time}</span>
-                        </div>
-                      </div>
-
-                      {/* Center Lotus Motif on Desktop */}
-                      <div className="hidden sm:flex flex-col items-center justify-center shrink-0">
-                        <img
-                          src={`${BASE_URL}/events/timeline-lotus-motif.webp`}
-                          draggable="false"
-                          className="w-10 opacity-90 drop-shadow"
-                          alt=""
-                        />
-                      </div>
-
-                      {/* Right: Venue Info & Same-Line Action Buttons */}
-                      <div className="flex-1 flex flex-col items-start sm:items-center text-left sm:text-center space-y-1.5">
-                        <span className="text-sm sm:text-xl font-bold text-[#801b1b] leading-snug">
-                          {ev.venue}
+          <ol className="grid grid-cols-3 gap-2 sm:gap-5 md:gap-7 items-stretch">
+            {events.map((ev) => (
+              <li key={ev.id} className="flex">
+                <Card3D className="w-full flex">
+                  <div className="w-full bg-white/90 backdrop-blur-md p-2.5 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border-2 border-[#d4af37]/50 shadow-[0_14px_34px_rgba(74,13,13,0.14)] flex flex-col items-center justify-between text-center">
+                    <div className="relative w-24 h-24 sm:w-44 sm:h-44 md:w-52 md:h-52 flex flex-col items-center justify-center mb-2 sm:mb-4 animate-float-3d">
+                      <img
+                        src={`${BASE_URL}/events/event-card-frame.webp`}
+                        draggable="false"
+                        className="absolute inset-0 w-full h-full object-contain pointer-events-none drop-shadow-md"
+                        alt=""
+                      />
+                      <div className="relative z-10 flex flex-col items-center text-center px-1 sm:px-4">
+                        <span className="text-[7px] sm:text-[11px] uppercase tracking-wider text-amber-900 font-bold">
+                          {ev.date}
                         </span>
-                        <span className="text-[11px] sm:text-sm text-[#4a0d0d] leading-snug line-clamp-2 sm:line-clamp-none">
-                          {ev.address}
-                        </span>
-
-                        {/* Action Buttons in the Same Row */}
-                        <div className="flex flex-row flex-wrap items-center gap-1.5 sm:gap-2.5 pt-1.5">
-                          <a
-                            href={ev.mapLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#801b1b] text-white text-[10px] sm:text-xs uppercase tracking-wider font-semibold hover:bg-[#5e1212] transition shadow-sm"
-                          >
-                            <MapPin size={12} />
-                            <span>Directions</span>
-                          </a>
-
-                          <div className="relative">
-                            <button
-                              onClick={() => setOpenCalendarId(openCalendarId === ev.id ? null : ev.id)}
-                              className="inline-flex items-center gap-1 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-[#801b1b] text-[#801b1b] text-[10px] sm:text-xs uppercase tracking-wider font-semibold hover:bg-[#801b1b] hover:text-white transition cursor-pointer"
-                            >
-                              <Calendar size={12} />
-                              <span>Calendar</span>
-                            </button>
-
-                            {openCalendarId === ev.id && (
-                              <div className="absolute right-0 sm:left-1/2 sm:-translate-x-1/2 mt-1.5 w-44 bg-white rounded-xl shadow-2xl border border-[#d4af37]/50 py-1.5 z-40 text-left text-xs font-semibold">
-                                <a
-                                  href={ev.gcal}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="block px-3.5 py-1.5 hover:bg-amber-50 text-[#4a0d0d]"
-                                >
-                                  Google Calendar
-                                </a>
-                                <a
-                                  href={ev.outlook}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="block px-3.5 py-1.5 hover:bg-amber-50 text-[#4a0d0d]"
-                                >
-                                  Outlook Calendar
-                                </a>
-                                <button
-                                  onClick={() => downloadIcs(ev)}
-                                  className="w-full text-left block px-3.5 py-1.5 hover:bg-amber-50 text-[#4a0d0d] cursor-pointer"
-                                >
-                                  Apple Calendar / iCal
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        </div>
+                        <h3 className="font-script text-xl sm:text-4xl md:text-5xl text-[#801b1b] my-0.5 leading-none">
+                          {ev.title}
+                        </h3>
+                        <span className="text-[8px] sm:text-xs font-bold text-[#4a0d0d]">{ev.time}</span>
                       </div>
                     </div>
-                  </Card3D>
-                </li>
-              ))}
-            </ol>
-          </div>
 
-          <picture className="block mt-8 sm:mt-10">
+                    <img
+                      src={`${BASE_URL}/events/timeline-lotus-motif.webp`}
+                      draggable="false"
+                      className="w-6 sm:w-10 my-1 sm:my-2 opacity-85"
+                      alt=""
+                    />
+
+                    <div className="flex flex-col items-center space-y-1 my-1">
+                      <span className="text-xs sm:text-lg md:text-xl font-bold text-[#801b1b] leading-tight">
+                        {ev.venue}
+                      </span>
+                      <span className="text-[9px] sm:text-xs text-[#4a0d0d] leading-snug line-clamp-3 sm:line-clamp-none">
+                        {ev.address}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-1.5 sm:gap-2 pt-2 sm:pt-4 w-full">
+                      <a
+                        href={ev.mapLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-1 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#801b1b] text-white text-[9px] sm:text-xs uppercase tracking-wider font-semibold hover:bg-[#5e1212] transition shadow-sm"
+                      >
+                        <MapPin size={11} />
+                        <span>Directions</span>
+                      </a>
+
+                      <div className="relative w-full sm:w-auto">
+                        <button
+                          onClick={() => setOpenCalendarId(openCalendarId === ev.id ? null : ev.id)}
+                          className="w-full sm:w-auto inline-flex items-center justify-center gap-1 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full border border-[#801b1b] text-[#801b1b] text-[9px] sm:text-xs uppercase tracking-wider font-semibold hover:bg-[#801b1b] hover:text-white transition cursor-pointer"
+                        >
+                          <Calendar size={11} />
+                          <span>Calendar</span>
+                        </button>
+
+                        {openCalendarId === ev.id && (
+                          <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1.5 w-36 sm:w-44 bg-white rounded-xl shadow-2xl border border-[#d4af37]/50 py-1.5 z-40 text-left text-[10px] sm:text-xs font-semibold">
+                            <a
+                              href={ev.gcal}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="block px-3 py-1.5 hover:bg-amber-50 text-[#4a0d0d]"
+                            >
+                              Google Calendar
+                            </a>
+                            <a
+                              href={ev.outlook}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="block px-3 py-1.5 hover:bg-amber-50 text-[#4a0d0d]"
+                            >
+                              Outlook Calendar
+                            </a>
+                            <button
+                              onClick={() => downloadIcs(ev)}
+                              className="w-full text-left block px-3 py-1.5 hover:bg-amber-50 text-[#4a0d0d] cursor-pointer"
+                            >
+                              Apple / iCal
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </Card3D>
+              </li>
+            ))}
+          </ol>
+
+          <picture className="block mt-8 sm:mt-12">
             <source media="(min-width:1024px)" srcSet={`${BASE_URL}/decorations/lotus-ornament-desktop.webp`} />
             <img src={`${BASE_URL}/decorations/lotus-ornament-mobile.webp`} draggable="false" className="w-36 sm:w-52 mx-auto" alt="" />
           </picture>
@@ -713,7 +853,7 @@ export default function App() {
       </section>
 
       {/* ========================================================= */}
-      {/* SECTION 5: RSVP / ENQUIRY SECTION (WITH 3D CARD EFFECT)   */}
+      {/* SECTION 5: RSVP / ENQUIRY SECTION                         */}
       {/* ========================================================= */}
       <section
         aria-label="RSVP and Wishes"
@@ -912,7 +1052,7 @@ export default function App() {
       </section>
 
       {/* ========================================================= */}
-      {/* SECTION 7: VENUE, COUNTDOWN & FOOTER                      */}
+      {/* SECTION 7: VENUE, FEATURE 4 (3D FLIP COUNTDOWN) & FOOTER  */}
       {/* ========================================================= */}
       <section
         aria-label="Venue and countdown"
@@ -951,6 +1091,7 @@ export default function App() {
           </div>
         </Card3D>
 
+        {/* Feature 4: 3D Flip Countdown Cards */}
         <Card3D className="relative z-10 w-full max-w-2xl mx-auto my-4">
           <div className="bg-white/88 backdrop-blur-md p-6 sm:p-10 rounded-3xl border-2 border-[#d4af37]/50 shadow-2xl flex flex-col items-center">
             <div className="flex items-center justify-center gap-4 mb-2">
@@ -966,27 +1107,30 @@ export default function App() {
             </p>
             <img src={`${BASE_URL}/decorations/divider-mobile.webp`} draggable="false" className="w-36 sm:w-44 mb-5" alt="" />
 
-            <div role="timer" className="grid grid-cols-4 gap-2 sm:gap-4 w-full max-w-md">
+            <div role="timer" className="grid grid-cols-4 gap-2 sm:gap-4 w-full max-w-md perspective-1000">
               {[
                 { value: timeLeft.days, label: 'Days' },
                 { value: timeLeft.hours, label: 'Hours' },
                 { value: timeLeft.minutes, label: 'Minutes' },
                 { value: timeLeft.seconds, label: 'Seconds' },
               ].map((item) => (
-                <div
+                <motion.div
                   key={item.label}
-                  className="bg-[#fffdf9] border-2 border-[#d4af37] rounded-2xl p-2 sm:p-3.5 shadow-inner flex flex-col items-center"
+                  animate={{ rotateX: [0, 15, 0] }}
+                  transition={{ duration: 0.8, repeat: Infinity, repeatDelay: item.label === 'Seconds' ? 0.2 : 5 }}
+                  className="bg-[#fffdf9] border-2 border-[#d4af37] rounded-2xl p-2 sm:p-3.5 shadow-inner flex flex-col items-center preserve-3d"
                 >
                   <span className="text-xl sm:text-3xl font-bold text-[#801b1b]">{item.value}</span>
                   <span className="text-[9px] sm:text-xs uppercase tracking-widest text-amber-900 mt-0.5">
                     {item.label}
                   </span>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
         </Card3D>
 
+        {/* Footer */}
         <footer className="relative z-10 mt-8 bg-white/85 backdrop-blur-sm px-6 py-3 rounded-full border border-[#d4af37]/40 flex items-center gap-4 text-xs text-[#4a0d0d] shadow-sm">
           <p>
             <a href="https://inviteutsav.com/" target="_blank" rel="noopener noreferrer" className="hover:underline">
