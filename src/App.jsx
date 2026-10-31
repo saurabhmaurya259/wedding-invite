@@ -3,9 +3,7 @@ import { MapPin, Calendar, Copy, Check, Phone, MessageCircle, Instagram } from '
 
 const BASE_URL = "https://inviteutsav.com/wp-content/themes/inviteutsav/assets/templates/siyaram-raghukul/images";
 
-// ============================================================================
-// 1. FLOATING GOLDEN PETALS / SPARKLES CANVAS (HERO & COUPLE SECTION)
-// ============================================================================
+// 1. Particle Canvas (Floating Golden Sparkles)
 function ParticleCanvas() {
   const canvasRef = useRef(null);
 
@@ -61,9 +59,7 @@ function ParticleCanvas() {
   return <canvas ref={canvasRef} aria-hidden="true" className="absolute inset-0 w-full h-full pointer-events-none z-15" />;
 }
 
-// ============================================================================
-// 2. HEART-SHAPED SCRATCH-OFF COMPONENT FOR DAY / MONTH / YEAR
-// ============================================================================
+// 2. Heart-Shaped Scratch-off Component
 function ScratchHeart({ label, value }) {
   const canvasRef = useRef(null);
   const [isScratching, setIsScratching] = useState(false);
@@ -78,7 +74,7 @@ function ScratchHeart({ label, value }) {
     ctx.clearRect(0, 0, w, h);
     ctx.save();
 
-    // Draw Heart Clipping Path
+    // Heart Clipping Path
     ctx.beginPath();
     ctx.moveTo(w / 2, h * 0.26);
     ctx.bezierCurveTo(w / 2, h * 0.18, w * 0.38, h * 0.06, w * 0.22, h * 0.06);
@@ -97,11 +93,6 @@ function ScratchHeart({ label, value }) {
     grad.addColorStop(1, '#9b7012');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
-
-    // Subtle Shimmer Lines
-    ctx.strokeStyle = 'rgba(255,255,255,0.35)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
 
     // Scratch Prompt Text
     ctx.fillStyle = '#5a1807';
@@ -136,8 +127,7 @@ function ScratchHeart({ label, value }) {
   };
 
   return (
-    <div className="relative w-26 h-26 sm:w-32 sm:h-32 flex flex-col items-center justify-center select-none">
-      {/* Underlying Heart SVG & Revealed Date Text */}
+    <div className="relative w-24 h-24 sm:w-32 sm:h-32 flex flex-col items-center justify-center select-none">
       <svg viewBox="0 0 120 120" className="absolute inset-0 w-full h-full drop-shadow-md">
         <path
           d="M60 31.2 C60 21.6, 45.6 7.2, 26.4 7.2 C2.4 7.2, 2.4 45.6, 2.4 45.6 C2.4 69.6, 28.8 92.4, 60 112.8 C91.2 92.4, 117.6 69.6, 117.6 45.6 C117.6 45.6, 117.6 7.2, 93.6 7.2 C74.4 7.2, 60 21.6, 60 31.2 Z"
@@ -152,7 +142,6 @@ function ScratchHeart({ label, value }) {
         <span className="text-xl sm:text-3xl font-bold text-[#5a1807] leading-tight">{value}</span>
       </div>
 
-      {/* Interactive Scratch Canvas Layer */}
       <canvas
         ref={canvasRef}
         width={128}
@@ -173,16 +162,14 @@ function ScratchHeart({ label, value }) {
   );
 }
 
-// ============================================================================
-// 3. MAIN APPLICATION
-// ============================================================================
+// 3. Main App Component
 export default function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [copied, setCopied] = useState(false);
   const [openCalendarId, setOpenCalendarId] = useState(null);
   const [timeLeft, setTimeLeft] = useState({ days: '00', hours: '00', minutes: '00', seconds: '00' });
 
-  // RSVP / Enquiry Form State (Matches Screenshot 1:1)
+  // RSVP Form State
   const [rsvpName, setRsvpName] = useState('');
   const [countryCode, setCountryCode] = useState('India +91');
   const [rsvpPhone, setRsvpPhone] = useState('');
@@ -203,14 +190,12 @@ export default function App() {
     setIsPlaying(!isPlaying);
   };
 
-  // Toggle multi-select event pills
   const toggleEventPill = (eventName) => {
     setAttendingEvents((prev) =>
       prev.includes(eventName) ? prev.filter((item) => item !== eventName) : [...prev, eventName]
     );
   };
 
-  // Handle RSVP Submission (Opens WhatsApp with formatted message or shows confirmation)
   const handleRsvpSubmit = (e) => {
     e.preventDefault();
     if (!rsvpName.trim() || !rsvpPhone.trim()) return;
@@ -218,7 +203,6 @@ export default function App() {
     setTimeout(() => setRsvpSubmitted(false), 4000);
   };
 
-  // Download .ics file for Apple Calendar / iCal
   const downloadIcs = (ev) => {
     const icsContent = [
       'BEGIN:VCALENDAR',
@@ -243,7 +227,6 @@ export default function App() {
     URL.revokeObjectURL(url);
   };
 
-  // Live Countdown to Dec 2, 2026 18:00:00 IST
   useEffect(() => {
     const target = new Date('2026-12-02T18:00:00+05:30').getTime();
     const interval = setInterval(() => {
@@ -320,7 +303,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden font-serif bg-[#fdf5ea] text-[#4a0d0d]">
-      {/* Original Background Audio */}
       <audio
         ref={audioRef}
         loop
@@ -328,7 +310,7 @@ export default function App() {
         src="https://inviteutsav.com/wp-content/themes/inviteutsav/assets/music/marriage/marriage-music-004.mp3"
       />
 
-      {/* Exact Bottom-Right Floating Equalizer Button (Matches Screenshot) */}
+      {/* Floating Bottom-Right Sound Button */}
       <button
         onClick={toggleAudio}
         aria-label="Toggle wedding music"
@@ -346,9 +328,7 @@ export default function App() {
         ))}
       </button>
 
-      {/* ========================================================= */}
-      {/* SECTION 1: WEDDING INVITATION OPENING (HERO)              */}
-      {/* ========================================================= */}
+      {/* SECTION 1: HERO */}
       <section
         aria-label="Wedding invitation opening"
         className="relative h-[100svh] min-h-[640px] w-full overflow-hidden flex flex-col items-center justify-center"
@@ -378,13 +358,12 @@ export default function App() {
           <img src={`${BASE_URL}/decorations/temple-flagpole-mobile.webp`} draggable="false" className="w-full h-full object-contain object-bottom" alt="" />
         </picture>
 
-        {/* Top Floral & Bells Frame */}
         <picture className="absolute top-0 inset-x-0 z-10 w-full pointer-events-none">
           <source media="(min-width:1024px)" srcSet={`${BASE_URL}/decorations/bells-frame-desktop.webp`} />
           <img src={`${BASE_URL}/decorations/bells-frame-mobile.webp`} draggable="false" className="w-full object-cover" alt="" />
         </picture>
 
-        {/* All 6 Hanging Bells from the Original DOM */}
+        {/* 6 Hanging Bells */}
         <img src={`${BASE_URL}/decorations/hanging-bell-a.webp`} draggable="false" className="absolute top-8 sm:top-12 left-[8%] w-6 sm:w-10 z-10 animate-swing pointer-events-none" alt="" />
         <img src={`${BASE_URL}/decorations/hanging-bell-b.webp`} draggable="false" className="absolute top-12 sm:top-16 left-[18%] w-4 sm:w-7 z-10 animate-swing-delayed pointer-events-none" alt="" />
         <img src={`${BASE_URL}/decorations/hanging-bell-b.webp`} draggable="false" className="absolute top-6 sm:top-10 left-[30%] w-4 sm:w-6 z-10 animate-swing pointer-events-none" alt="" />
@@ -392,10 +371,8 @@ export default function App() {
         <img src={`${BASE_URL}/decorations/hanging-bell-b.webp`} draggable="false" className="absolute top-12 sm:top-16 right-[18%] w-4 sm:w-7 z-10 animate-swing pointer-events-none" alt="" />
         <img src={`${BASE_URL}/decorations/hanging-bell-a.webp`} draggable="false" className="absolute top-8 sm:top-12 right-[8%] w-6 sm:w-10 z-10 animate-swing-delayed pointer-events-none" alt="" />
 
-        {/* Particle Canvas */}
         <ParticleCanvas />
 
-        {/* Hero Couple Names */}
         <h1 className="relative z-20 text-center flex flex-col items-center -mt-10 sm:-mt-16 select-none px-4">
           <span className="font-script text-6xl sm:text-8xl md:text-9xl text-[#4a0d0d] drop-shadow-sm leading-none">
             Muskan
@@ -409,9 +386,7 @@ export default function App() {
         </h1>
       </section>
 
-      {/* ========================================================= */}
-      {/* SECTION 2: INVITATION DETAILS                             */}
-      {/* ========================================================= */}
+      {/* SECTION 2: INVITATION DETAILS */}
       <section
         aria-label="Invitation details"
         className="relative min-h-screen w-full py-20 sm:py-28 px-4 flex flex-col items-center justify-center text-center overflow-hidden"
@@ -450,9 +425,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* ========================================================= */}
-      {/* SECTION 3: MEET THE COUPLE & SCRATCH HEARTS               */}
-      {/* ========================================================= */}
+      {/* SECTION 3: MEET THE COUPLE & SCRATCH HEARTS */}
       <section
         aria-label="Meet the couple"
         className="relative min-h-screen w-full py-20 sm:py-28 px-4 flex flex-col items-center justify-center text-center overflow-hidden"
@@ -507,9 +480,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* ========================================================= */}
-      {/* SECTION 4: WEDDING TIMELINE (OUR CELEBRATIONS)            */}
-      {/* ========================================================= */}
+      {/* SECTION 4: WEDDING TIMELINE */}
       <section aria-label="Wedding timeline" className="relative w-full py-20 sm:py-28 px-4 overflow-hidden">
         <picture className="absolute inset-0 w-full h-full pointer-events-none">
           <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/timeline-paper-mobile.webp`} />
@@ -534,7 +505,6 @@ export default function App() {
                   alt=""
                 />
 
-                {/* Ornate Event Card Frame */}
                 <div className="relative w-64 h-64 sm:w-80 sm:h-80 flex flex-col items-center justify-center mb-5">
                   <img
                     src={`${BASE_URL}/events/event-card-frame.webp`}
@@ -551,7 +521,6 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Venue Box + Directions + 3 Calendar Links */}
                 <div className="w-full max-w-md bg-white/85 backdrop-blur-sm p-5 sm:p-6 rounded-2xl border border-[#d4af37]/40 shadow-md flex flex-col items-center space-y-2">
                   <span className="text-lg sm:text-xl font-bold text-[#801b1b]">{ev.venue}</span>
                   <span className="text-xs sm:text-sm text-[#4a0d0d] leading-relaxed">{ev.address}</span>
@@ -623,14 +592,11 @@ export default function App() {
         </div>
       </section>
 
-      {/* ========================================================= */}
-      {/* SECTION 5: RSVP / ENQUIRY SECTION (1:1 FROM SCREENSHOT)   */}
-      {/* ========================================================= */}
+      {/* SECTION 5: RSVP / ENQUIRY SECTION */}
       <section
         aria-label="RSVP and Wishes"
         className="relative w-full py-16 sm:py-24 px-4 bg-[#fdf1e2] overflow-hidden flex items-center justify-center"
       >
-        {/* Floating Decorative Pastel Blossoms in Background */}
         {[
           'top-10 left-[8%]',
           'top-1/3 left-[18%]',
@@ -655,7 +621,6 @@ export default function App() {
           </h2>
 
           <form onSubmit={handleRsvpSubmit} className="space-y-5">
-            {/* Your Name */}
             <div>
               <label className="block text-xs sm:text-sm font-semibold text-[#4a1515] mb-1.5">
                 Your Name <span className="text-red-600">*</span>
@@ -669,7 +634,6 @@ export default function App() {
               />
             </div>
 
-            {/* Phone Number */}
             <div>
               <label className="block text-xs sm:text-sm font-semibold text-[#4a1515] mb-1.5">
                 Phone Number <span className="text-red-600">*</span>
@@ -696,7 +660,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Which events will you be attending? */}
             <div>
               <label className="block text-xs sm:text-sm font-semibold text-[#4a1515] mb-2">
                 Which events will you be attending?
@@ -722,7 +685,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Team Bride or Team Groom? */}
             <div>
               <label className="block text-xs sm:text-sm font-semibold text-[#4a1515] mb-2">
                 Team Bride or Team Groom?
@@ -748,7 +710,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* A Little Note For Us */}
             <div>
               <label className="block text-xs sm:text-sm font-semibold text-[#4a1515] mb-1.5">
                 A Little Note For Us
@@ -762,7 +723,6 @@ export default function App() {
               />
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               className="w-full py-3.5 rounded-full bg-[#8b3103] hover:bg-[#6e2602] text-white font-semibold text-sm sm:text-base shadow-md transition cursor-pointer"
@@ -771,7 +731,6 @@ export default function App() {
             </button>
           </form>
 
-          {/* Bottom Contact Divider & Bride's Father Details */}
           <hr className="my-6 border-amber-900/15" />
           <div className="flex items-center justify-between">
             <div>
@@ -800,9 +759,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* ========================================================= */}
-      {/* SECTION 6: WEDDING HASHTAG                                */}
-      {/* ========================================================= */}
+      {/* SECTION 6: HASHTAG */}
       <section
         aria-label="Wedding hashtag"
         className="py-14 sm:py-16 px-4 bg-[#fdf6e9] border-y border-[#d4af37]/30 text-center flex flex-col items-center"
@@ -826,9 +783,7 @@ export default function App() {
         </p>
       </section>
 
-      {/* ========================================================= */}
-      {/* SECTION 7: VENUE, COUNTDOWN & INVITEUTSAV FOOTER          */}
-      {/* ========================================================= */}
+      {/* SECTION 7: VENUE & COUNTDOWN */}
       <section
         aria-label="Venue and countdown"
         className="relative min-h-screen w-full py-20 sm:py-24 px-4 flex flex-col items-center justify-between text-center overflow-hidden"
@@ -842,7 +797,6 @@ export default function App() {
           <img src={`${BASE_URL}/backgrounds/countdown-scene-mobile.webp`} draggable="false" className="w-full h-full object-cover object-bottom" alt="" />
         </picture>
 
-        {/* Venue Card */}
         <div className="relative z-10 w-full max-w-lg mx-auto bg-white/85 backdrop-blur-md p-6 sm:p-10 rounded-3xl border-2 border-[#d4af37]/50 shadow-xl my-6">
           <h2 className="font-script text-4xl sm:text-5xl text-[#801b1b] mb-3">
             We look forward to welcoming you
@@ -865,7 +819,6 @@ export default function App() {
           </a>
         </div>
 
-        {/* Countdown Card */}
         <div className="relative z-10 w-full max-w-2xl mx-auto bg-white/85 backdrop-blur-md p-6 sm:p-12 rounded-3xl border-2 border-[#d4af37]/50 shadow-2xl my-6 flex flex-col items-center">
           <div className="flex items-center justify-center gap-4 mb-3">
             <img src={`${BASE_URL}/decorations/ornament-burst-mobile.webp`} draggable="false" className="w-20 sm:w-28 opacity-80" alt="" />
@@ -900,7 +853,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* Exact Original Footer */}
         <footer className="relative z-10 mt-10 bg-white/85 backdrop-blur-sm px-6 py-3 rounded-full border border-[#d4af37]/40 flex items-center gap-4 text-xs text-[#4a0d0d] shadow-sm">
           <p>
             <a href="https://inviteutsav.com/" target="_blank" rel="noopener noreferrer" className="hover:underline">
