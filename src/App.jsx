@@ -911,7 +911,7 @@ export default function App() {
       {/* ========================================================= */}
       <section
         aria-label="Venue and RSVP"
-        className="relative w-full py-14 sm:py-20 px-4 bg-[#fdf1e2] overflow-hidden flex items-center justify-center"
+        className="relative w-full py-14 sm:py-20 px-4 bg-[#fdf1e2] overflow-hidden flex flex-col items-center justify-center gap-3 sm:gap-5"
       >
         {[
           'top-8 left-[8%]',
@@ -1105,7 +1105,7 @@ export default function App() {
       {/* SECTION 7: COUNTDOWN & FOOTER                             */}
       {/* ========================================================= */}
       <section
-        aria-label="Venue and countdown"
+        aria-label="Wedding countdown"
         className="relative w-full py-14 sm:py-20 px-4 flex flex-col items-center justify-between text-center overflow-hidden"
       >
         <picture className="absolute inset-0 w-full h-full pointer-events-none">
