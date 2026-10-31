@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
-import { MapPin, Calendar, Copy, Check, Phone, MessageCircle } from 'lucide-react';
+import { AnimatePresence, motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
+import { MapPin, Calendar, Copy, Check, Phone } from 'lucide-react';
 
 const BASE_URL = "https://inviteutsav.com/wp-content/themes/inviteutsav/assets/templates/siyaram-raghukul/images";
 
@@ -38,7 +38,7 @@ function Card3D({ children, className = "" }) {
       onTouchEnd={resetTilt}
       initial={{ opacity: 0, y: 30, scale: 0.96, rotateX: 8 }}
       whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
-      viewport={{ once: false, amount: 0.15 }}
+      viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
       className={`perspective-1000 ${className}`}
@@ -461,17 +461,34 @@ export default function App() {
       {/* ========================================================= */}
       {/* FEATURE 1: 3D ROYAL CURTAIN GATE / ENVELOPE OPENING       */}
       {/* ========================================================= */}
-      {!isOpen && (
+      <AnimatePresence>
+        {!isOpen && (
         <motion.div
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, scale: 1.08 }}
-          transition={{ duration: 0.9, ease: "easeInOut" }}
-          className="fixed inset-0 z-50 bg-[#4a0d0d] flex flex-col items-center justify-center p-6 text-center overflow-hidden"
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8, delay: 0.35, ease: "easeInOut" }}
+          className="fixed inset-0 z-50 bg-transparent flex flex-col items-center justify-center p-6 text-center overflow-hidden"
         >
           {/* Ornate Royal Background Frame */}
           <div className="absolute inset-4 sm:inset-8 border-2 border-[#d4af37]/60 rounded-3xl pointer-events-none flex items-center justify-center">
             <div className="absolute inset-2 border border-[#d4af37]/30 rounded-2xl" />
           </div>
+
+          {/* Split velvet curtains reveal the invitation underneath. */}
+          <motion.div
+            aria-hidden="true"
+            initial={{ x: 0 }}
+            exit={{ x: "-102%" }}
+            transition={{ duration: 1.15, ease: [0.76, 0, 0.24, 1] }}
+            className="absolute inset-y-0 left-0 z-0 w-1/2 border-r border-[#d4af37]/50 bg-[linear-gradient(90deg,#2b0505_0%,#641414_78%,#4a0d0d_100%)] shadow-[12px_0_35px_rgba(20,0,0,0.28)]"
+          />
+          <motion.div
+            aria-hidden="true"
+            initial={{ x: 0 }}
+            exit={{ x: "102%" }}
+            transition={{ duration: 1.15, ease: [0.76, 0, 0.24, 1] }}
+            className="absolute inset-y-0 right-0 z-0 w-1/2 border-l border-[#d4af37]/50 bg-[linear-gradient(270deg,#2b0505_0%,#641414_78%,#4a0d0d_100%)] shadow-[-12px_0_35px_rgba(20,0,0,0.28)]"
+          />
 
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -505,7 +522,8 @@ export default function App() {
             </motion.button>
           </motion.div>
         </motion.div>
-      )}
+        )}
+      </AnimatePresence>
 
       {/* Floating Bottom-Right Equalizer Button */}
       <button
@@ -532,33 +550,41 @@ export default function App() {
         aria-label="Wedding invitation opening"
         className="relative h-[100svh] min-h-[650px] w-full overflow-hidden flex flex-col items-center justify-start pt-24 sm:pt-28 md:pt-32 perspective-1000"
       >
-        <picture className="absolute inset-0 w-full h-full pointer-events-none">
+        <motion.picture
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isOpen ? 1 : 0 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          className="absolute inset-0 w-full h-full pointer-events-none"
+        >
           <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/hero-sky-desktop.webp`} />
           <img src={`${BASE_URL}/backgrounds/hero-sky-mobile.webp`} draggable="false" className="w-full h-full object-cover" alt="" />
-        </picture>
+        </motion.picture>
 
         <div
           aria-hidden="true"
           className="absolute inset-x-0 bottom-0 h-[75%] pointer-events-none bg-[radial-gradient(circle_at_50%_75%,rgba(255,215,100,0.55),rgba(255,165,60,0.2)_50%,transparent_75%)]"
         />
 
-        <motion.picture style={{ y: sunY }} className="absolute inset-0 w-full h-full pointer-events-none">
+        <motion.picture style={{ y: sunY }} initial={{ opacity: 0 }} animate={{ opacity: isOpen ? 1 : 0 }} transition={{ duration: 1.4, delay: 0.15 }} className="absolute inset-0 w-full h-full pointer-events-none">
           <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/hero-sun-desktop.webp`} />
           <img src={`${BASE_URL}/backgrounds/hero-sun-mobile.webp`} draggable="false" className="w-full h-full object-cover mix-blend-screen" alt="" />
         </motion.picture>
 
-        <motion.picture style={{ y: mountainY }} className="absolute inset-0 w-full h-full pointer-events-none">
+        <motion.picture style={{ y: mountainY }} initial={{ opacity: 0 }} animate={{ opacity: isOpen ? 1 : 0 }} transition={{ duration: 1.4, delay: 0.3 }} className="absolute inset-0 w-full h-full pointer-events-none">
           <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/hero-mountain-desktop.webp`} />
           <img src={`${BASE_URL}/backgrounds/hero-mountain-mobile.webp`} draggable="false" className="w-full h-full object-cover object-bottom" alt="" />
         </motion.picture>
 
-        <motion.picture style={{ y: cloudY }} className="absolute inset-0 w-full h-full pointer-events-none">
+        <motion.picture style={{ y: cloudY }} initial={{ opacity: 0 }} animate={{ opacity: isOpen ? 1 : 0 }} transition={{ duration: 1.4, delay: 0.45 }} className="absolute inset-0 w-full h-full pointer-events-none">
           <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/hero-cloud-desktop.webp`} />
           <img src={`${BASE_URL}/backgrounds/hero-cloud-mobile.webp`} draggable="false" className="w-full h-full object-cover object-bottom opacity-85" alt="" />
         </motion.picture>
 
         <motion.picture
           style={{ scale: templeScale, y: templeY }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isOpen ? 1 : 0 }}
+          transition={{ duration: 1.6, delay: 0.6, ease: "easeOut" }}
           className="absolute inset-x-0 bottom-0 h-[68%] sm:h-[78%] w-full pointer-events-none origin-bottom z-5"
         >
           <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/hero-temple-desktop.webp`} />
@@ -609,9 +635,9 @@ export default function App() {
 
         <motion.h1
           style={{ y: titleY }}
-          initial={{ opacity: 0, scale: 0.88, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 1.1, ease: "easeOut" }}
+          initial={{ opacity: 0, scale: 0.88 }}
+          animate={{ opacity: isOpen ? 1 : 0, scale: isOpen ? 1 : 0.88 }}
+          transition={{ duration: 1.1, delay: 1.05, ease: "easeOut" }}
           className="relative z-25 text-center flex flex-col items-center select-none px-4 mt-4 sm:mt-6"
         >
           <span className="font-script text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-[#4a0d0d] drop-shadow-[0_3px_14px_rgba(255,253,245,0.95)] leading-none">
@@ -1133,14 +1159,14 @@ export default function App() {
         {/* Footer */}
         <footer className="relative z-10 mt-8 bg-white/85 backdrop-blur-sm px-6 py-3 rounded-full border border-[#d4af37]/40 flex items-center gap-4 text-xs text-[#4a0d0d] shadow-sm">
           <p>
-            <a href="https://inviteutsav.com/" target="_blank" rel="noopener noreferrer" className="hover:underline">
-              Crafted with <span aria-hidden="true" className="text-red-600">❤</span> by InviteUtsav
+            <a href="https://axiomforgeco.org/" target="_blank" rel="noopener noreferrer" className="hover:underline">
+              Crafted with <span aria-hidden="true" className="text-red-600">❤</span> by Saurabh (axiomforgeco)
             </a>
           </p>
           <div className="flex items-center gap-2 border-l border-amber-900/20 pl-3">
             <a
-              aria-label="InviteUtsav on Instagram"
-              href="https://www.instagram.com/inviteutsav/"
+              aria-label="Saurabh on Instagram"
+              href="https://www.instagram.com/m.saurabh__/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#801b1b] hover:scale-110 transition"
@@ -1150,15 +1176,6 @@ export default function App() {
                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
                 <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
               </svg>
-            </a>
-            <a
-              aria-label="Message InviteUtsav on WhatsApp"
-              href="https://wa.me/918283003222?text=Hi%20InviteUtsav!%20I%20visited%20the%20wedding%20invitation%20of%20Muskan%20%26%20Devesh%20and%20really%20liked%20the%20design."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#801b1b] hover:scale-110 transition"
-            >
-              <MessageCircle size={16} />
             </a>
           </div>
         </footer>
