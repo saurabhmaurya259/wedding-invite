@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { AnimatePresence, motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
-import { MapPin, Calendar, Copy, Check, Phone, MessageCircle } from 'lucide-react';
+import { MapPin, Calendar, Copy, Check, Phone, MessageCircle, Bell } from 'lucide-react';
 
 const BASE_URL = "https://inviteutsav.com/wp-content/themes/inviteutsav/assets/templates/siyaram-raghukul/images";
 
@@ -288,13 +288,10 @@ export default function App() {
   const audioRef = useRef(null);
   const { scrollY } = useScroll();
 
-  // 3D Multi-plane Parallax Transforms for Ram Mandir Hero
-  const sunY = useTransform(scrollY, [0, 700], [0, 160]);
-  const mountainY = useTransform(scrollY, [0, 700], [0, 95]);
-  const cloudY = useTransform(scrollY, [0, 700], [0, 60]);
-  const templeScale = useTransform(scrollY, [0, 700], [1.04, 1.16]);
-  const templeY = useTransform(scrollY, [0, 700], [0, 35]);
-  const titleY = useTransform(scrollY, [0, 500], [0, 110]);
+  // Gentle scroll depth for the composed portrait hero artwork.
+  const heroImageY = useTransform(scrollY, [0, 900], [0, 38]);
+  const heroImageScale = useTransform(scrollY, [0, 900], [1.015, 1.075]);
+  const titleY = useTransform(scrollY, [0, 500], [0, 55]);
 
   // Feature 1: Handle Opening the Invitation Gate & Auto-playing Audio
   const handleOpenInvitation = () => {
@@ -544,112 +541,73 @@ export default function App() {
       </button>
 
       {/* ========================================================= */}
-      {/* SECTION 1: 3D RAM MANDIR HERO OPENING                     */}
+      {/* SECTION 1: CINEMATIC TEMPLE GARDEN HERO                    */}
       {/* ========================================================= */}
       <section
         aria-label="Wedding invitation opening"
-        className="relative h-[100svh] min-h-[650px] w-full overflow-hidden flex flex-col items-center justify-start pt-24 sm:pt-28 md:pt-32 perspective-1000"
+        className="relative isolate h-[100svh] min-h-[680px] max-h-[1040px] w-full overflow-hidden flex items-start justify-center bg-[#f6e5ca]"
       >
-        <motion.picture
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isOpen ? 1 : 0 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-          className="absolute inset-0 w-full h-full pointer-events-none"
-        >
-          <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/hero-sky-desktop.webp`} />
-          <img src={`${BASE_URL}/backgrounds/hero-sky-mobile.webp`} draggable="false" className="w-full h-full object-cover" alt="" />
-        </motion.picture>
-
+        {/* Soft, blurred artwork fills wide desktop screens while the full portrait scene stays visible in the centre. */}
+        <img
+          src="/wedding-art/hero-temple.webp"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl opacity-35"
+        />
+        <motion.img
+          src="/wedding-art/hero-temple.webp"
+          alt="A bride and groom walking towards an ornate temple through a flower-filled garden"
+          fetchPriority="high"
+          initial={{ opacity: 0, scale: 1.08 }}
+          animate={{ opacity: isOpen ? 1 : 0, scale: isOpen ? 1 : 1.08 }}
+          style={{ y: heroImageY, scale: heroImageScale }}
+          transition={{ duration: 1.8, delay: 0.25, ease: "easeOut" }}
+          className="absolute inset-0 z-[1] h-full w-full object-cover object-center md:left-1/2 md:right-auto md:w-auto md:max-w-[96vw] md:-translate-x-1/2 md:object-contain"
+        />
         <div
           aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 h-[75%] pointer-events-none bg-[radial-gradient(circle_at_50%_75%,rgba(255,215,100,0.55),rgba(255,165,60,0.2)_50%,transparent_75%)]"
+          className="absolute inset-x-0 top-0 z-[2] h-[42%] bg-gradient-to-b from-[#fff4df]/35 via-[#fff4df]/10 to-transparent pointer-events-none"
         />
 
-        <motion.picture style={{ y: sunY }} initial={{ opacity: 0 }} animate={{ opacity: isOpen ? 1 : 0 }} transition={{ duration: 1.4, delay: 0.15 }} className="absolute inset-0 w-full h-full pointer-events-none">
-          <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/hero-sun-desktop.webp`} />
-          <img src={`${BASE_URL}/backgrounds/hero-sun-mobile.webp`} draggable="false" className="w-full h-full object-cover mix-blend-screen" alt="" />
-        </motion.picture>
-
-        <motion.picture style={{ y: mountainY }} initial={{ opacity: 0 }} animate={{ opacity: isOpen ? 1 : 0 }} transition={{ duration: 1.4, delay: 0.3 }} className="absolute inset-0 w-full h-full pointer-events-none">
-          <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/hero-mountain-desktop.webp`} />
-          <img src={`${BASE_URL}/backgrounds/hero-mountain-mobile.webp`} draggable="false" className="w-full h-full object-cover object-bottom" alt="" />
-        </motion.picture>
-
-        <motion.picture style={{ y: cloudY }} initial={{ opacity: 0 }} animate={{ opacity: isOpen ? 1 : 0 }} transition={{ duration: 1.4, delay: 0.45 }} className="absolute inset-0 w-full h-full pointer-events-none">
-          <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/hero-cloud-desktop.webp`} />
-          <img src={`${BASE_URL}/backgrounds/hero-cloud-mobile.webp`} draggable="false" className="w-full h-full object-cover object-bottom opacity-85" alt="" />
-        </motion.picture>
-
-        <motion.picture
-          style={{ scale: templeScale, y: templeY }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isOpen ? 1 : 0 }}
-          transition={{ duration: 1.6, delay: 0.6, ease: "easeOut" }}
-          className="absolute inset-x-0 bottom-0 h-[68%] sm:h-[78%] w-full pointer-events-none origin-bottom z-5"
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: isOpen ? 1 : 0, y: isOpen ? 0 : 24 }}
+          transition={{ duration: 1.1, delay: 0.85, ease: "easeOut" }}
+          style={{ y: titleY }}
+          className="absolute top-[12%] sm:top-[13%] z-20 w-full px-4 text-center select-none pointer-events-none"
         >
-          <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/hero-temple-desktop.webp`} />
-          <img
-            src={`${BASE_URL}/backgrounds/hero-temple-mobile.webp`}
-            draggable="false"
-            className="w-full h-full object-cover object-bottom contrast-110 saturate-115 drop-shadow-[0_-12px_35px_rgba(212,175,55,0.45)]"
-            alt="Ram Mandir"
-          />
-        </motion.picture>
+          <p className="mb-2 text-[9px] sm:text-xs uppercase tracking-[0.28em] font-semibold text-[#8b4b22] drop-shadow-sm">
+            Together with their families
+          </p>
+          <h1 className="flex flex-col items-center font-script text-[#6d171d] drop-shadow-[0_2px_10px_rgba(255,247,230,0.85)] leading-[0.88]">
+            <span className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl">Muskan</span>
+            <span className="my-1 font-serif text-2xl sm:text-3xl md:text-4xl text-[#b88428]">&amp;</span>
+            <span className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl">Devesh</span>
+          </h1>
+          <p className="mt-3 text-[9px] sm:text-xs uppercase tracking-[0.24em] text-[#87542d] font-semibold">
+            01 — 02 December 2026
+          </p>
+        </motion.div>
 
-        <picture className="absolute inset-0 w-full h-full pointer-events-none z-6">
-          <source media="(min-width:1024px)" srcSet={`${BASE_URL}/decorations/temple-flagpole-desktop.webp`} />
-          <img
-            src={`${BASE_URL}/decorations/temple-flagpole-mobile.webp`}
-            draggable="false"
-            className="w-full h-full object-contain object-bottom drop-shadow-md"
-            alt=""
-          />
-        </picture>
-
-        <picture className="absolute top-0 inset-x-0 z-20 w-full pointer-events-none drop-shadow-xl">
-          <source media="(min-width:1024px)" srcSet={`${BASE_URL}/decorations/bells-frame-desktop.webp`} />
-          <img src={`${BASE_URL}/decorations/bells-frame-mobile.webp`} draggable="false" className="w-full object-cover" alt="" />
-        </picture>
-
-        {/* Feature 3: Interactive Chime Bells on Tap */}
-        {[
-          { src: `${BASE_URL}/decorations/hanging-bell-a.webp`, className: "absolute top-2 sm:top-4 left-[4%] sm:left-[6%] w-7 sm:w-11 z-20 animate-swing pointer-events-auto cursor-pointer drop-shadow-lg" },
-          { src: `${BASE_URL}/decorations/hanging-bell-b.webp`, className: "absolute top-4 sm:top-8 left-[14%] sm:left-[15%] w-5 sm:w-8 z-20 animate-swing-delayed pointer-events-auto cursor-pointer drop-shadow-md" },
-          { src: `${BASE_URL}/decorations/hanging-bell-b.webp`, className: "absolute top-1 sm:top-3 left-[24%] sm:left-[24%] w-4 sm:w-6 z-20 animate-swing pointer-events-auto cursor-pointer drop-shadow-md" },
-          { src: `${BASE_URL}/decorations/hanging-bell-b.webp`, className: "absolute top-1 sm:top-3 right-[24%] sm:right-[24%] w-4 sm:w-6 z-20 animate-swing-delayed pointer-events-auto cursor-pointer drop-shadow-md" },
-          { src: `${BASE_URL}/decorations/hanging-bell-b.webp`, className: "absolute top-4 sm:top-8 right-[14%] sm:right-[15%] w-5 sm:w-8 z-20 animate-swing pointer-events-auto cursor-pointer drop-shadow-md" },
-          { src: `${BASE_URL}/decorations/hanging-bell-a.webp`, className: "absolute top-2 sm:top-4 right-[4%] sm:right-[6%] w-7 sm:w-11 z-20 animate-swing-delayed pointer-events-auto cursor-pointer drop-shadow-lg" },
-        ].map((bell, i) => (
-          <img
-            key={i}
-            src={bell.src}
-            draggable="false"
-            onClick={playBellChime}
-            className={bell.className}
-            title="Tap to ring temple bell"
-            alt="Temple Bell"
-          />
-        ))}
+        <button
+          type="button"
+          onClick={playBellChime}
+          aria-label="Ring a temple bell"
+          title="Ring a temple bell"
+          className="absolute right-4 top-4 z-30 grid h-10 w-10 place-items-center rounded-full border border-[#d7ae62]/70 bg-[#fff8e8]/80 text-[#8b4b22] shadow-lg backdrop-blur-sm transition hover:scale-105"
+        >
+          <Bell size={18} />
+        </button>
 
         <ParticleCanvas />
 
-        <motion.h1
-          style={{ y: titleY }}
-          initial={{ opacity: 0, scale: 0.88 }}
-          animate={{ opacity: isOpen ? 1 : 0, scale: isOpen ? 1 : 0.88 }}
-          transition={{ duration: 1.1, delay: 1.05, ease: "easeOut" }}
-          className="relative z-25 text-center flex flex-col items-center select-none px-4 mt-4 sm:mt-6"
+        <motion.div
+          animate={{ y: [0, 7, 0], opacity: [0.65, 1, 0.65] }}
+          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-5 z-30 rounded-full border border-[#b9853d]/50 bg-[#fff7e8]/70 px-4 py-2 text-[9px] uppercase tracking-[0.22em] text-[#7d452a] backdrop-blur-sm"
         >
-          <span className="font-script text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-[#4a0d0d] drop-shadow-[0_3px_14px_rgba(255,253,245,0.95)] leading-none">
-            Muskan
-          </span>
-          <span className="font-serif italic text-2xl sm:text-4xl md:text-5xl text-[#b8860b] my-1 drop-shadow-[0_2px_8px_rgba(255,255,255,0.9)]">
-            &amp;
-          </span>
-          <span className="font-script text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-[#4a0d0d] drop-shadow-[0_3px_14px_rgba(255,253,245,0.95)] leading-none">
-            Devesh
-          </span>
-        </motion.h1>
+          Scroll to explore
+        </motion.div>
       </section>
 
       {/* ========================================================= */}
@@ -659,10 +617,15 @@ export default function App() {
         aria-label="Invitation details"
         className="relative w-full py-14 sm:py-20 px-4 flex flex-col items-center justify-center text-center overflow-hidden"
       >
-        <picture className="absolute inset-0 w-full h-full pointer-events-none">
-          <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/garden-bridge-desktop.webp`} />
-          <img src={`${BASE_URL}/backgrounds/garden-bridge-mobile.webp`} draggable="false" className="w-full h-full object-cover" alt="" />
-        </picture>
+        <div className="absolute inset-0 pointer-events-none bg-[#f8e8d0]">
+          <img
+            src="/wedding-art/invitation-garden.webp"
+            draggable="false"
+            className="h-full w-full object-cover object-center"
+            alt=""
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#fff8ec]/10 via-transparent to-[#f8e8d0]/20" />
+        </div>
 
         <Card3D className="relative z-10 w-full max-w-xl mx-auto">
           <div className="bg-white/88 backdrop-blur-md p-6 sm:p-10 rounded-3xl border-2 border-[#d4af37]/50 shadow-[0_20px_50px_rgba(74,13,13,0.18)] flex flex-col items-center preserve-3d">
@@ -702,10 +665,7 @@ export default function App() {
         aria-label="Meet the couple"
         className="relative w-full py-14 sm:py-20 px-4 flex flex-col items-center justify-center text-center overflow-hidden"
       >
-        <picture className="absolute inset-0 w-full h-full pointer-events-none">
-          <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/couple-section-desktop.webp`} />
-          <img src={`${BASE_URL}/backgrounds/couple-section-mobile.webp`} draggable="false" className="w-full h-full object-cover" alt="" />
-        </picture>
+        <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,#fff8e9_0%,#f8e9d2_55%,#f4e0c2_100%)]" />
 
         <img
           src={`${BASE_URL}/decorations/mandala.webp`}
@@ -755,6 +715,22 @@ export default function App() {
             </p>
           </div>
         </Card3D>
+
+        <motion.div
+          initial={{ opacity: 0, y: 42, scale: 0.97 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.18 }}
+          transition={{ duration: 1.05, ease: "easeOut" }}
+          className="relative z-10 mt-5 w-full max-w-4xl overflow-hidden rounded-[28px] shadow-[0_22px_55px_rgba(88,34,18,0.18)]"
+        >
+          <img
+            src="/wedding-art/mandap-stage.webp"
+            alt="A flower-covered wedding mandap with red velvet drapes and a ceremonial sofa"
+            loading="lazy"
+            className="block h-auto w-full object-cover"
+          />
+          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#5b2018]/15 to-transparent pointer-events-none" />
+        </motion.div>
       </section>
 
       {/* ========================================================= */}
@@ -1108,10 +1084,15 @@ export default function App() {
         aria-label="Wedding countdown"
         className="relative w-full py-14 sm:py-20 px-4 flex flex-col items-center justify-between text-center overflow-hidden"
       >
-        <picture className="absolute inset-0 w-full h-full pointer-events-none">
-          <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/countdown-scene-desktop.webp`} />
-          <img src={`${BASE_URL}/backgrounds/countdown-scene-mobile.webp`} draggable="false" className="w-full h-full object-cover object-bottom" alt="" />
-        </picture>
+        <div className="absolute inset-0 pointer-events-none bg-[#f8e9d2]">
+          <img
+            src="/wedding-art/elephant-countdown.webp"
+            draggable="false"
+            className="absolute inset-x-0 bottom-0 h-[58%] w-full object-cover object-center sm:h-[64%]"
+            alt=""
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#fff7e8] via-[#fff7e8]/65 to-transparent" />
+        </div>
 
         {/* Feature 4: 3D Flip Countdown Cards */}
         <Card3D className="relative z-10 w-full max-w-2xl mx-auto my-4">
