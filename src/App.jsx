@@ -879,10 +879,38 @@ export default function App() {
       </section>
 
       {/* ========================================================= */}
+      {/* SECTION 6: WEDDING HASHTAG                                */}
+      {/* ========================================================= */}
+      <section
+        aria-label="Wedding hashtag"
+        className="py-10 sm:py-12 px-4 bg-[#fdf6e9] border-y border-[#d4af37]/30 text-center flex flex-col items-center"
+      >
+        <h2 className="font-script text-4xl sm:text-5xl text-[#801b1b] mb-2">Our Hashtag</h2>
+        <motion.button
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.96 }}
+          onClick={copyHashtag}
+          className="group inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-white border-2 border-[#d4af37] shadow-md cursor-pointer"
+        >
+          <span className="text-lg sm:text-2xl font-bold tracking-wide text-[#4a0d0d]">
+            #MuskanWedsDevesh
+          </span>
+          {copied ? (
+            <Check size={18} className="text-green-700" />
+          ) : (
+            <Copy size={18} className="text-[#c59b27]" />
+          )}
+        </motion.button>
+        <p className="text-[10px] sm:text-xs uppercase tracking-widest text-amber-900 mt-2">
+          {copied ? 'Copied to clipboard!' : 'Tap to copy & use it in all your posts!'}
+        </p>
+      </section>
+
+      {/* ========================================================= */}
       {/* SECTION 5: RSVP / ENQUIRY SECTION                         */}
       {/* ========================================================= */}
       <section
-        aria-label="RSVP and Wishes"
+        aria-label="Venue and RSVP"
         className="relative w-full py-14 sm:py-20 px-4 bg-[#fdf1e2] overflow-hidden flex items-center justify-center"
       >
         {[
@@ -902,6 +930,30 @@ export default function App() {
             ✿
           </span>
         ))}
+
+        <Card3D className="relative z-10 w-full max-w-lg mx-auto my-4">
+          <div className="bg-white/88 backdrop-blur-md p-6 sm:p-8 rounded-3xl border-2 border-[#d4af37]/50 shadow-xl">
+            <h2 className="font-script text-4xl sm:text-5xl text-[#801b1b] mb-2">
+              We look forward to welcoming you
+            </h2>
+            <h3 className="text-xl sm:text-2xl font-bold text-[#4a0d0d]">Ps Club Royale</h3>
+            <p className="text-xs uppercase tracking-widest text-amber-800 font-semibold my-1">
+              Sangeet &amp; Haldi &amp; Wedding
+            </p>
+            <p className="text-xs sm:text-sm text-[#4a0d0d] my-2 leading-relaxed">
+              Godadih - Raipur Road Near Mahadev Ghat, Bridge, Changurabhata, Raipur, Chhattisgarh
+            </p>
+            <a
+              href="https://maps.app.goo.gl/7hMsBULV72HHqies8"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 mt-2 px-6 py-2.5 rounded-full bg-[#801b1b] text-white text-xs uppercase tracking-widest font-semibold hover:bg-[#5e1212] transition shadow-md"
+            >
+              <MapPin size={14} />
+              <span>Get Directions</span>
+            </a>
+          </div>
+        </Card3D>
 
         <Card3D className="relative z-10 w-full max-w-[540px]">
           <div className="bg-white rounded-[28px] shadow-[0_18px_50px_rgba(107,45,20,0.12)] p-6 sm:p-9 text-left font-sans border border-[#f3cfc6]/40">
@@ -1050,72 +1102,16 @@ export default function App() {
       </section>
 
       {/* ========================================================= */}
-      {/* SECTION 6: WEDDING HASHTAG                                */}
-      {/* ========================================================= */}
-      <section
-        aria-label="Wedding hashtag"
-        className="py-10 sm:py-12 px-4 bg-[#fdf6e9] border-y border-[#d4af37]/30 text-center flex flex-col items-center"
-      >
-        <h2 className="font-script text-4xl sm:text-5xl text-[#801b1b] mb-2">Our Hashtag</h2>
-        <motion.button
-          whileHover={{ scale: 1.04 }}
-          whileTap={{ scale: 0.96 }}
-          onClick={copyHashtag}
-          className="group inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-white border-2 border-[#d4af37] shadow-md cursor-pointer"
-        >
-          <span className="text-lg sm:text-2xl font-bold tracking-wide text-[#4a0d0d]">
-            #MuskanWedsDevesh
-          </span>
-          {copied ? (
-            <Check size={18} className="text-green-700" />
-          ) : (
-            <Copy size={18} className="text-[#c59b27]" />
-          )}
-        </motion.button>
-        <p className="text-[10px] sm:text-xs uppercase tracking-widest text-amber-900 mt-2">
-          {copied ? 'Copied to clipboard!' : 'Tap to copy & use it in all your posts!'}
-        </p>
-      </section>
-
-      {/* ========================================================= */}
-      {/* SECTION 7: VENUE, FEATURE 4 (3D FLIP COUNTDOWN) & FOOTER  */}
+      {/* SECTION 7: COUNTDOWN & FOOTER                             */}
       {/* ========================================================= */}
       <section
         aria-label="Venue and countdown"
         className="relative w-full py-14 sm:py-20 px-4 flex flex-col items-center justify-between text-center overflow-hidden"
       >
         <picture className="absolute inset-0 w-full h-full pointer-events-none">
-          <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/location-section-desktop.webp`} />
-          <img src={`${BASE_URL}/backgrounds/location-section-mobile.webp`} draggable="false" className="w-full h-full object-cover opacity-50" alt="" />
-        </picture>
-        <picture className="absolute inset-0 w-full h-full pointer-events-none">
           <source media="(min-width:1024px)" srcSet={`${BASE_URL}/backgrounds/countdown-scene-desktop.webp`} />
           <img src={`${BASE_URL}/backgrounds/countdown-scene-mobile.webp`} draggable="false" className="w-full h-full object-cover object-bottom" alt="" />
         </picture>
-
-        <Card3D className="relative z-10 w-full max-w-lg mx-auto my-4">
-          <div className="bg-white/88 backdrop-blur-md p-6 sm:p-8 rounded-3xl border-2 border-[#d4af37]/50 shadow-xl">
-            <h2 className="font-script text-4xl sm:text-5xl text-[#801b1b] mb-2">
-              We look forward to welcoming you
-            </h2>
-            <h3 className="text-xl sm:text-2xl font-bold text-[#4a0d0d]">Ps Club Royale</h3>
-            <p className="text-xs uppercase tracking-widest text-amber-800 font-semibold my-1">
-              Sangeet &amp; Haldi &amp; Wedding
-            </p>
-            <p className="text-xs sm:text-sm text-[#4a0d0d] my-2 leading-relaxed">
-              Godadih - Raipur Road Near Mahadev Ghat, Bridge, Changurabhata, Raipur, Chhattisgarh
-            </p>
-            <a
-              href="https://maps.app.goo.gl/7hMsBULV72HHqies8"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 mt-2 px-6 py-2.5 rounded-full bg-[#801b1b] text-white text-xs uppercase tracking-widest font-semibold hover:bg-[#5e1212] transition shadow-md"
-            >
-              <MapPin size={14} />
-              <span>Get Directions</span>
-            </a>
-          </div>
-        </Card3D>
 
         {/* Feature 4: 3D Flip Countdown Cards */}
         <Card3D className="relative z-10 w-full max-w-2xl mx-auto my-4">
