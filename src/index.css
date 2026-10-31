@@ -51,3 +51,34 @@
 .preserve-3d {
   transform-style: preserve-3d;
 }
+
+html {
+  scroll-behavior: smooth;
+  background: #f8e9d2;
+}
+
+body {
+  background: #f8e9d2;
+  color: #4a0d0d;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(185, 132, 40, 0.22);
+  color: #64171d;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
