@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", serif;
+  --font-script: "Great Vibes", cursive;
+  --font-sanskrit: "Noto Sans Devanagari", serif;
+}
+
+@keyframes swing {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes soundBar {
+  0%, 100% { height: 6px; }
+  50% { height: 20px; }
+}
+
+@keyframes floatFlower {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(12deg); }
+}
+
+.animate-swing {
+  transform-origin: top center;
+  animation: swing 3.5s ease-in-out infinite;
+}
+
+.animate-swing-delayed {
+  transform-origin: top center;
+  animation: swing 4.2s ease-in-out 1.2s infinite;
+}
+
+.animate-spin-slow {
+  animation: spinSlow 45s linear infinite;
+}
+
+.animate-float-flower {
+  animation: floatFlower 5s ease-in-out infinite;
+}
