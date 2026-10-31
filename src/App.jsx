@@ -1160,7 +1160,7 @@ export default function App() {
         <footer className="relative z-10 mt-8 bg-white/85 backdrop-blur-sm px-6 py-3 rounded-full border border-[#d4af37]/40 flex items-center gap-4 text-xs text-[#4a0d0d] shadow-sm">
           <p>
             <a href="https://axiomforgeco.org/" target="_blank" rel="noopener noreferrer" className="hover:underline">
-              Crafted with <span aria-hidden="true" className="text-red-600">❤</span> by Saurabh (axiomforgeco)
+              Crafted with <span aria-hidden="true" className="text-red-600">❤</span> by Saurabh(axiomforgeco)
             </a>
           </p>
           <div className="flex items-center gap-2 border-l border-amber-900/20 pl-3">
