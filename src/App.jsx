@@ -118,7 +118,10 @@ function ConfettiBurst({ active }) {
   return (
     <div className="absolute inset-0 pointer-events-none z-30 overflow-hidden flex items-center justify-center">
       {particles.map((_, i) => {
+        // Random values are intentional here: each confetti burst should scatter differently.
+        // eslint-disable-next-line react-hooks/purity
         const angle = Math.random() * Math.PI * 2;
+        // eslint-disable-next-line react-hooks/purity
         const distance = Math.random() * 180 + 50;
         const color = ['#d4af37', '#ff6b6b', '#ffdf73', '#e65c00', '#fff'][i % 5];
         return (
@@ -130,6 +133,7 @@ function ConfettiBurst({ active }) {
               y: Math.sin(angle) * distance - 40,
               scale: [0, 1.2, 0.8],
               opacity: [1, 1, 0],
+              // eslint-disable-next-line react-hooks/purity
               rotate: Math.random() * 360,
             }}
             transition={{ duration: 1.2, ease: "easeOut" }}
@@ -333,7 +337,7 @@ export default function App() {
       gain.connect(ctx.destination);
       osc.start();
       osc.stop(ctx.currentTime + 1.5);
-    } catch (e) {
+    } catch {
       console.log("AudioContext not supported");
     }
   };
