@@ -75,3 +75,31 @@ test('UTC calendar values match the date and time displayed to Indian guests', (
     assert.equal(localTime, event.time, event.title + ' local time');
   }
 });
+
+test('RSVP defaults and contact details are internally consistent', () => {
+  const eventTitles = weddingDetails.events.map((event) => event.title);
+  assert.deepEqual(weddingDetails.rsvp.defaultAttendingEvents, eventTitles);
+  assert.ok(weddingDetails.rsvp.countryCodes.includes(weddingDetails.rsvp.defaultCountryCode));
+  assert.deepEqual(
+    weddingDetails.rsvp.teamOptions,
+    [
+      'Team ' + weddingDetails.couple.brideName,
+      'Team ' + weddingDetails.couple.groomName,
+      'Team Both!',
+    ],
+  );
+  assert.ok(weddingDetails.rsvp.phonePlaceholder);
+  assert.ok(weddingDetails.contact.name);
+  assert.ok(weddingDetails.contact.relationship);
+  assert.ok(weddingDetails.contact.phone.startsWith('+'));
+  assert.equal(weddingDetails.contact.whatsapp, weddingDetails.contact.phone.slice(1));
+});
+
+test('family, venue, and asset configuration is complete', () => {
+  assert.ok(weddingDetails.family.brideParents);
+  assert.ok(weddingDetails.family.groomParents);
+  assert.ok(weddingDetails.venue.mapLink.startsWith('https://'));
+  assert.ok(weddingDetails.assets.baseUrl.startsWith('https://'));
+  assert.ok(weddingDetails.assets.backgroundMusic.startsWith('https://'));
+  assert.ok(weddingDetails.calendar.invitationUrl.startsWith('https://'));
+});

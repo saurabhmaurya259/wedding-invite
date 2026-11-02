@@ -1,16 +1,42 @@
-# React + Vite
+# Wedding Invitation
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive wedding invitation built with React and Vite. The current visual design and artwork live in `src/App.jsx`, `src/index.css`, `src/App.css`, and `public/wedding-art/`.
 
-Currently, two official plugins are available:
+## Local development
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Use Node.js 24 (the same major version used by CI).
 
-## React Compiler
+```bash
+npm ci
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Vite prints the local URL after startup.
 
-## Expanding the ESLint configuration
+## Project commands
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the Vite development server |
+| `npm test` | Run the wedding data and calendar tests |
+| `npm run lint` | Run ESLint |
+| `npm run build` | Create the production build in `dist/` |
+| `npm run preview` | Preview the production build locally |
+
+## Invitation content
+
+The sample wedding information is centralized in `src/data/weddingDetails.js`. It contains the couple and family names, date/countdown target, venue, event details, calendar links, RSVP defaults, contact details, and asset URLs.
+
+Keep the existing event labels and displayed times consistent with their calendar timestamps. The venue time zone is configured as `Asia/Kolkata`; the `icsStart` and `icsEnd` values are UTC timestamps ending in `Z`, representing the same moments as the displayed Indian local times.
+
+The current names, dates, venue and contact fields are sample values. Replace them only with confirmed details.
+
+## RSVP storage status
+
+The current RSVP form performs client-side required-field validation and displays its existing confirmation state. It does **not** yet persist submissions to Google Sheets or a database. Durable RSVP storage requires a server-side API and deployment configuration. Credentials must remain in the backend's secret store or environment and must never be placed in browser code or a `VITE_*` variable.
+
+## Continuous integration
+
+The workflow at `.github/workflows/ci.yml` runs on pushes and pull requests targeting `preferred-design-work`. It installs locked dependencies, audits production dependencies, runs the data tests, runs ESLint, and builds the production assets.
+
+This workflow validates the branch; it does not deploy the website.
