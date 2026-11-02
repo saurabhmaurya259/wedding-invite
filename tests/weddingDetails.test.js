@@ -61,12 +61,13 @@ test('events have unique ids and valid calendar data', () => {
 test('UTC calendar values match the date and time displayed to Indian guests', () => {
   for (const event of weddingDetails.events) {
     const local = timeParts(parseUtc(event.icsStart));
-    const match = /^(\\d+)(?:st|nd|rd|th) ([A-Za-z]{3}) (\\d{4})$/.exec(event.date);
-    assert.ok(match, 'Unexpected date label: ' + event.date);
+    const [dayToken, monthName, year] = event.date.split(' ');
+    const dayNumber = Number(dayToken.replace('st', '').replace('nd', '').replace('rd', '').replace('th', ''));
+    assert.ok(Number.isInteger(dayNumber), 'Unexpected date label: ' + event.date);
 
-    const day = String(match[1]).padStart(2, '0');
-    const month = String(new Date(match[2] + ' 1, ' + match[3]).getMonth() + 1).padStart(2, '0');
-    const date = match[3] + '-' + month + '-' + day;
+    const day = String(dayNumber).padStart(2, '0');
+    const month = String(new Date(monthName + ' 1, ' + year).getMonth() + 1).padStart(2, '0');
+    const date = year + '-' + month + '-' + day;
     const localDate = local.year + '-' + local.month + '-' + local.day;
     const localTime = local.hour + ':' + local.minute + ' ' + local.dayPeriod;
 
