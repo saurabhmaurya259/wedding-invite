@@ -68,6 +68,7 @@ export const weddingDetails = {
   },
   calendar: {
     invitationUrl: 'https://muskanwedsdevesh.inviteutsav.com/',
+    timeZone: 'Asia/Kolkata',
   },
   assets: {
     baseUrl: 'https://inviteutsav.com/wp-content/themes/inviteutsav/assets/templates/siyaram-raghukul/images',
