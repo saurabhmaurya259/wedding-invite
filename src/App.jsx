@@ -3,7 +3,7 @@ import { AnimatePresence, motion, useScroll, useTransform, useMotionValue, useSp
 import { MapPin, Calendar, Copy, Check, Phone, MessageCircle, Bell } from 'lucide-react';
 import { weddingDetails } from './data/weddingDetails';
 
-const BASE_URL = "https://inviteutsav.com/wp-content/themes/inviteutsav/assets/templates/siyaram-raghukul/images";
+const BASE_URL = weddingDetails.assets.baseUrl;
 
 // ============================================================================
 // 1. 3D INTERACTIVE CARD WRAPPER
@@ -283,7 +283,7 @@ export default function App() {
 
   // RSVP State
   const [rsvpName, setRsvpName] = useState('');
-  const [countryCode, setCountryCode] = useState('India +91');
+  const [countryCode, setCountryCode] = useState(weddingDetails.rsvp.defaultCountryCode);
   const [rsvpPhone, setRsvpPhone] = useState('');
   const [attendingEvents, setAttendingEvents] = useState(weddingDetails.rsvp.defaultAttendingEvents);
   const [teamSide, setTeamSide] = useState('');
@@ -417,7 +417,7 @@ export default function App() {
         ref={audioRef}
         loop
         preload="auto"
-        src="https://inviteutsav.com/wp-content/themes/inviteutsav/assets/music/marriage/marriage-music-004.mp3"
+        src={weddingDetails.assets.backgroundMusic}
       />
 
       {/* ========================================================= */}
@@ -604,7 +604,7 @@ export default function App() {
 
             <div className="space-y-1.5 sm:space-y-2.5 text-[#4a0d0d]">
               <p className="text-lg sm:text-2xl font-bold">
-                Smt. Arpana Dubey &amp; Shri D.S. Dubey
+                {weddingDetails.family.brideParents}
               </p>
               <p className="text-xs sm:text-sm italic text-amber-900 max-w-md mx-auto py-1">
                 With joy and the blessings of our elders, we invite you to the wedding of our dear daughter
@@ -614,7 +614,7 @@ export default function App() {
               <p className="font-script text-5xl sm:text-6xl text-[#801b1b] py-0.5 drop-shadow-sm">{groomName}</p>
               <p className="text-xs sm:text-sm italic text-amber-900 pt-1">Beloved son of</p>
               <p className="text-lg sm:text-2xl font-bold">
-                Smt. Mintoo Devi Singh &amp; Shri Ram Awadh Singh
+                {weddingDetails.family.groomParents}
               </p>
             </div>
           </div>
@@ -882,7 +882,7 @@ export default function App() {
             </h2>
             <h3 className="text-xl sm:text-2xl font-bold text-[#4a0d0d]">{venueName}</h3>
             <p className="text-xs uppercase tracking-widest text-amber-800 font-semibold my-1">
-              Sangeet &amp; Haldi &amp; Wedding
+              {weddingDetails.events.map((event) => event.title).join(' & ')}
             </p>
             <p className="text-xs sm:text-sm text-[#4a0d0d] my-2 leading-relaxed">
               {venueAddress}
@@ -929,15 +929,14 @@ export default function App() {
                     onChange={(e) => setCountryCode(e.target.value)}
                     className="h-11 px-3 rounded-full border border-stone-300 bg-white text-xs sm:text-sm text-stone-700 focus:border-[#8b3103] focus:outline-none w-28 sm:w-34 shrink-0"
                   >
-                    <option value="India +91">India +91</option>
-                    <option value="USA +1">USA +1</option>
-                    <option value="UK +44">UK +44</option>
-                    <option value="UAE +971">UAE +971</option>
+                    {weddingDetails.rsvp.countryCodes.map((code) => (
+                      <option key={code} value={code}>{code}</option>
+                    ))}
                   </select>
                   <input
                     type="tel"
                     required
-                    placeholder="98765 43210"
+                    placeholder={weddingDetails.rsvp.phonePlaceholder}
                     value={rsvpPhone}
                     onChange={(e) => setRsvpPhone(e.target.value)}
                     className="w-full h-11 px-4 rounded-full border border-stone-300 focus:border-[#8b3103] focus:outline-none text-sm text-stone-800 placeholder:text-stone-400"
@@ -975,7 +974,7 @@ export default function App() {
                   Team Bride or Team Groom?
                 </label>
                 <div className="flex flex-row flex-wrap gap-2">
-                  {[`Team ${brideName}`, `Team ${groomName}`, 'Team Both!'].map((team) => {
+                  {weddingDetails.rsvp.teamOptions.map((team) => {
                     const active = teamSide === team;
                     return (
                       <button
@@ -1019,22 +1018,22 @@ export default function App() {
             <hr className="my-5 border-amber-900/15" />
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm sm:text-base font-bold text-[#4a1515]">Shri D. S. Dubey</p>
-                <p className="text-xs text-stone-500">Bride&apos;s Father</p>
+                <p className="text-sm sm:text-base font-bold text-[#4a1515]">{weddingDetails.contact.name}</p>
+                <p className="text-xs text-stone-500">{weddingDetails.contact.relationship}</p>
               </div>
               <div className="flex items-center gap-2.5">
                 <a
-                  href="tel:+919876543210"
-                  aria-label="Call Bride's Father"
+                  href={`tel:${weddingDetails.contact.phone}`}
+                  aria-label={`Call ${weddingDetails.contact.relationship}`}
                   className="w-9 h-9 rounded-full bg-[#fcecd8] text-[#8b3103] flex items-center justify-center hover:bg-[#f5d9b8] transition"
                 >
                   <Phone size={16} />
                 </a>
                 <a
-                  href="https://wa.me/919876543210"
+                  href={`https://wa.me/${weddingDetails.contact.whatsapp}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="WhatsApp Bride's Father"
+                  aria-label={`WhatsApp ${weddingDetails.contact.relationship}`}
                   className="w-9 h-9 rounded-full bg-[#fcecd8] text-[#8b3103] flex items-center justify-center hover:bg-[#f5d9b8] transition"
                 >
                   <MessageCircle size={16} />
