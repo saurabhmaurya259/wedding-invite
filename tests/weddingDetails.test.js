@@ -1,0 +1,76 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { weddingDetails } from '../src/data/weddingDetails.js';
+
+function parseUtc(value) {
+  const text = value.slice(0, 4) + '-' + value.slice(4, 6) + '-' + value.slice(6, 8)
+    + 'T' + value.slice(9, 11) + ':' + value.slice(11, 13) + ':' + value.slice(13, 15) + 'Z';
+  return new Date(text);
+}
+
+function timeParts(date) {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: weddingDetails.calendar.timeZone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  }).formatToParts(date);
+  return Object.fromEntries(parts.map((part) => [part.type, part.value]));
+}
+
+test('wedding invitation configuration has the required core details', () => {
+  assert.ok(weddingDetails.couple.brideName);
+  assert.ok(weddingDetails.couple.groomName);
+  assert.ok(weddingDetails.couple.hashtag);
+  assert.ok(weddingDetails.date.countdownTarget);
+  assert.ok(weddingDetails.venue.name);
+  assert.ok(weddingDetails.venue.address);
+  assert.equal(weddingDetails.calendar.timeZone, 'Asia/Kolkata');
+});
+
+test('events have unique ids and valid calendar data', () => {
+  const ids = weddingDetails.events.map((event) => event.id);
+  assert.equal(new Set(ids).size, ids.length);
+
+  for (const event of weddingDetails.events) {
+    assert.ok(event.title);
+    assert.ok(event.date);
+    assert.ok(event.time);
+    assert.ok(event.venue);
+    assert.ok(event.address);
+    assert.ok(event.mapLink);
+    assert.ok(event.gcal.startsWith('https://calendar.google.com/'));
+    assert.ok(event.outlook.startsWith('https://outlook.live.com/'));
+
+    const start = parseUtc(event.icsStart);
+    const end = parseUtc(event.icsEnd);
+    assert.ok(Number.isFinite(start.getTime()));
+    assert.ok(end > start);
+
+    const dates = new URL(event.gcal).searchParams.get('dates');
+    assert.equal(dates, event.icsStart + '/' + event.icsEnd);
+
+    assert.equal(new Date(new URL(event.outlook).searchParams.get('startdt')).getTime(), start.getTime());
+    assert.equal(new Date(new URL(event.outlook).searchParams.get('enddt')).getTime(), end.getTime());
+  }
+});
+
+test('UTC calendar values match the date and time displayed to Indian guests', () => {
+  for (const event of weddingDetails.events) {
+    const local = timeParts(parseUtc(event.icsStart));
+    const match = /^(\\d+)(?:st|nd|rd|th) ([A-Za-z]{3}) (\\d{4})$/.exec(event.date);
+    assert.ok(match, 'Unexpected date label: ' + event.date);
+
+    const day = String(match[1]).padStart(2, '0');
+    const month = String(new Date(match[2] + ' 1, ' + match[3]).getMonth() + 1).padStart(2, '0');
+    const date = match[3] + '-' + month + '-' + day;
+    const localDate = local.year + '-' + local.month + '-' + local.day;
+    const localTime = local.hour + ':' + local.minute + ' ' + local.dayPeriod;
+
+    assert.equal(localDate, date, event.title + ' local date');
+    assert.equal(localTime, event.time, event.title + ' local time');
+  }
+});
