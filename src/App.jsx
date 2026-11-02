@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { AnimatePresence, motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import { MapPin, Calendar, Copy, Check, Phone, MessageCircle, Bell } from 'lucide-react';
+import { weddingDetails } from './data/weddingDetails';
 
 const BASE_URL = "https://inviteutsav.com/wp-content/themes/inviteutsav/assets/templates/siyaram-raghukul/images";
 
@@ -267,6 +268,10 @@ function ScratchHeart({ label, value, onReveal }) {
 // 5. MAIN APPLICATION
 // ============================================================================
 export default function App() {
+  const { brideName, groomName, dateLabel, hashtag } = weddingDetails.couple;
+  const { day: weddingDay, month: weddingMonth, year: weddingYear, countdownTarget } = weddingDetails.date;
+  const { name: venueName, address: venueAddress, mapLink: venueMapLink } = weddingDetails.venue;
+  const displayHashtag = hashtag.startsWith('#') ? hashtag : `#${hashtag}`;
   // Feature 1: Royal Curtain Gate State (defaults to false so guest sees gate first)
   const [isOpen, setIsOpen] = useState(false);
 
@@ -280,7 +285,7 @@ export default function App() {
   const [rsvpName, setRsvpName] = useState('');
   const [countryCode, setCountryCode] = useState('India +91');
   const [rsvpPhone, setRsvpPhone] = useState('');
-  const [attendingEvents, setAttendingEvents] = useState(['Sangeet', 'Haldi', 'Wedding']);
+  const [attendingEvents, setAttendingEvents] = useState(weddingDetails.rsvp.defaultAttendingEvents);
   const [teamSide, setTeamSide] = useState('');
   const [rsvpNote, setRsvpNote] = useState('');
   const [rsvpSubmitted, setRsvpSubmitted] = useState(false);
@@ -355,9 +360,9 @@ export default function App() {
     const icsContent = [
       'BEGIN:VCALENDAR',
       'VERSION:2.0',
-      'PRODID:-//Muskan Weds Devesh//Wedding Invitation//EN',
+      `PRODID:-//${brideName} Weds ${groomName}//Wedding Invitation//EN`,
       'BEGIN:VEVENT',
-      `SUMMARY:${ev.title} - Muskan & Devesh`,
+      `SUMMARY:${ev.title} - ${brideName} & ${groomName}`,
       `DTSTART:${ev.icsStart}`,
       `DTEND:${ev.icsEnd}`,
       `LOCATION:${ev.venue}, ${ev.address}`,
@@ -370,13 +375,13 @@ export default function App() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${ev.title}-Muskan-Devesh.ics`;
+    a.download = `${ev.title}-${brideName}-${groomName}.ics`;
     a.click();
     URL.revokeObjectURL(url);
   };
 
   useEffect(() => {
-    const target = new Date('2026-12-02T18:00:00+05:30').getTime();
+    const target = new Date(countdownTarget).getTime();
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const diff = target - now;
@@ -396,55 +401,15 @@ export default function App() {
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [countdownTarget]);
 
   const copyHashtag = () => {
-    navigator.clipboard.writeText('#MuskanWedsDevesh');
+    navigator.clipboard.writeText(displayHashtag);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const events = [
-    {
-      id: 1,
-      date: "1st Dec 2026",
-      title: "Sangeet",
-      time: "07:00 PM",
-      venue: "Ps Club Royale",
-      address: "Godadih - Raipur Road Near Mahadev Ghat, Bridge, Changurabhata, Raipur, Chhattisgarh",
-      mapLink: "https://maps.app.goo.gl/7hMsBULV72HHqies8",
-      icsStart: "20261201T190000Z",
-      icsEnd: "20261201T210000Z",
-      gcal: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Sangeet&dates=20261201T190000Z/20261201T210000Z&details=https://muskanwedsdevesh.inviteutsav.com/&location=Ps+Club+Royale,+Raipur,+Chhattisgarh",
-      outlook: "https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=Sangeet&startdt=2026-12-01T19:00:00+00:00&enddt=2026-12-01T21:00:00+00:00&location=Ps+Club+Royale,+Raipur",
-    },
-    {
-      id: 2,
-      date: "2nd Dec 2026",
-      title: "Haldi",
-      time: "11:00 AM",
-      venue: "Ps Club Royale",
-      address: "Godadih - Raipur Road Near Mahadev Ghat, Bridge, Changurabhata, Raipur, Chhattisgarh",
-      mapLink: "https://maps.app.goo.gl/7hMsBULV72HHqies8",
-      icsStart: "20261202T110000Z",
-      icsEnd: "20261202T130000Z",
-      gcal: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Haldi&dates=20261202T110000Z/20261202T130000Z&details=https://muskanwedsdevesh.inviteutsav.com/&location=Ps+Club+Royale,+Raipur,+Chhattisgarh",
-      outlook: "https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=Haldi&startdt=2026-12-02T11:00:00+00:00&enddt=2026-12-02T13:00:00+00:00&location=Ps+Club+Royale,+Raipur",
-    },
-    {
-      id: 3,
-      date: "2nd Dec 2026",
-      title: "Wedding",
-      time: "06:00 PM",
-      venue: "Ps Club Royale",
-      address: "Godadih - Raipur Road Near Mahadev Ghat, Bridge, Changurabhata, Raipur, Chhattisgarh",
-      mapLink: "https://maps.app.goo.gl/7hMsBULV72HHqies8",
-      icsStart: "20261202T180000Z",
-      icsEnd: "20261202T200000Z",
-      gcal: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Wedding&dates=20261202T180000Z/20261202T200000Z&details=https://muskanwedsdevesh.inviteutsav.com/&location=Ps+Club+Royale,+Raipur,+Chhattisgarh",
-      outlook: "https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=Wedding&startdt=2026-12-02T18:00:00+00:00&enddt=2026-12-02T20:00:00+00:00&location=Ps+Club+Royale,+Raipur",
-    },
-  ];
+  const events = weddingDetails.events;
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden font-serif bg-[#fdf5ea] text-[#4a0d0d] relative">
@@ -498,11 +463,11 @@ export default function App() {
             </span>
 
             <h2 className="font-script text-6xl sm:text-7xl md:text-8xl text-[#fffdf9] drop-shadow-md my-2">
-              Muskan
+              {brideName}
             </h2>
             <span className="font-serif italic text-3xl text-[#d4af37] my-1">&amp;</span>
             <h2 className="font-script text-6xl sm:text-7xl md:text-8xl text-[#fffdf9] drop-shadow-md my-2">
-              Devesh
+              {groomName}
             </h2>
 
             <p className="text-xs sm:text-sm text-amber-100/80 italic font-serif mt-4 mb-8">
@@ -578,12 +543,12 @@ export default function App() {
             Together with their families
           </p>
           <h1 className="flex flex-col items-center font-script text-[#6d171d] drop-shadow-[0_2px_10px_rgba(255,247,230,0.85)] leading-[0.88]">
-            <span className="text-6xl sm:text-7xl md:text-6xl lg:text-7xl">Muskan</span>
+            <span className="text-6xl sm:text-7xl md:text-6xl lg:text-7xl">{brideName}</span>
             <span className="my-1 font-serif text-2xl sm:text-3xl md:text-3xl text-[#b88428]">&amp;</span>
-            <span className="text-6xl sm:text-7xl md:text-6xl lg:text-7xl">Devesh</span>
+            <span className="text-6xl sm:text-7xl md:text-6xl lg:text-7xl">{groomName}</span>
           </h1>
           <p className="mt-3 text-[9px] sm:text-xs uppercase tracking-[0.24em] text-[#87542d] font-semibold">
-            01 — 02 December 2026
+            {dateLabel}
           </p>
         </motion.div>
 
@@ -644,9 +609,9 @@ export default function App() {
               <p className="text-xs sm:text-sm italic text-amber-900 max-w-md mx-auto py-1">
                 With joy and the blessings of our elders, we invite you to the wedding of our dear daughter
               </p>
-              <p className="font-script text-5xl sm:text-6xl text-[#801b1b] py-0.5 drop-shadow-sm">Muskan</p>
+              <p className="font-script text-5xl sm:text-6xl text-[#801b1b] py-0.5 drop-shadow-sm">{brideName}</p>
               <p className="font-serif italic text-xl text-[#c59b27]">and</p>
-              <p className="font-script text-5xl sm:text-6xl text-[#801b1b] py-0.5 drop-shadow-sm">Devesh</p>
+              <p className="font-script text-5xl sm:text-6xl text-[#801b1b] py-0.5 drop-shadow-sm">{groomName}</p>
               <p className="text-xs sm:text-sm italic text-amber-900 pt-1">Beloved son of</p>
               <p className="text-lg sm:text-2xl font-bold">
                 Smt. Mintoo Devi Singh &amp; Shri Ram Awadh Singh
@@ -691,9 +656,9 @@ export default function App() {
               role="group"
               className="flex flex-row items-center justify-center gap-3 sm:gap-8 my-4"
             >
-              <ScratchHeart label="Day" value="2" onReveal={triggerConfetti} />
-              <ScratchHeart label="Month" value="DEC" onReveal={triggerConfetti} />
-              <ScratchHeart label="Year" value="2026" onReveal={triggerConfetti} />
+              <ScratchHeart label="Day" value={weddingDay} onReveal={triggerConfetti} />
+              <ScratchHeart label="Month" value={weddingMonth} onReveal={triggerConfetti} />
+              <ScratchHeart label="Year" value={weddingYear} onReveal={triggerConfetti} />
             </div>
 
             <p className="text-xs sm:text-base text-[#4a0d0d] leading-relaxed mt-4">
@@ -872,7 +837,7 @@ export default function App() {
           className="group inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-white border-2 border-[#d4af37] shadow-md cursor-pointer"
         >
           <span className="text-lg sm:text-2xl font-bold tracking-wide text-[#4a0d0d]">
-            #MuskanWedsDevesh
+            {displayHashtag}
           </span>
           {copied ? (
             <Check size={18} className="text-green-700" />
@@ -915,15 +880,15 @@ export default function App() {
             <h2 className="font-script text-4xl sm:text-5xl text-[#801b1b] mb-2">
               We look forward to welcoming you
             </h2>
-            <h3 className="text-xl sm:text-2xl font-bold text-[#4a0d0d]">Ps Club Royale</h3>
+            <h3 className="text-xl sm:text-2xl font-bold text-[#4a0d0d]">{venueName}</h3>
             <p className="text-xs uppercase tracking-widest text-amber-800 font-semibold my-1">
               Sangeet &amp; Haldi &amp; Wedding
             </p>
             <p className="text-xs sm:text-sm text-[#4a0d0d] my-2 leading-relaxed">
-              Godadih - Raipur Road Near Mahadev Ghat, Bridge, Changurabhata, Raipur, Chhattisgarh
+              {venueAddress}
             </p>
             <a
-              href="https://maps.app.goo.gl/7hMsBULV72HHqies8"
+              href={venueMapLink}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 mt-2 px-6 py-2.5 rounded-full bg-[#801b1b] text-white text-xs uppercase tracking-widest font-semibold hover:bg-[#5e1212] transition shadow-md"
@@ -985,7 +950,7 @@ export default function App() {
                   Which events will you be attending?
                 </label>
                 <div className="flex flex-row flex-wrap gap-2">
-                  {['Sangeet', 'Haldi', 'Wedding'].map((evName) => {
+                  {weddingDetails.events.map(({ title: evName }) => {
                     const active = attendingEvents.includes(evName);
                     return (
                       <button
@@ -1010,7 +975,7 @@ export default function App() {
                   Team Bride or Team Groom?
                 </label>
                 <div className="flex flex-row flex-wrap gap-2">
-                  {['Team Muskan', 'Team Devesh', 'Team Both!'].map((team) => {
+                  {[`Team ${brideName}`, `Team ${groomName}`, 'Team Both!'].map((team) => {
                     const active = teamSide === team;
                     return (
                       <button
