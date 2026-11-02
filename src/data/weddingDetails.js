@@ -5,9 +5,9 @@
 export const weddingDetails = {
   couple: {
     brideName: 'Muskan',
-    groomName: 'Devesh',
+    groomName: 'Swastik',
     dateLabel: '01 — 02 December 2026',
-    hashtag: '#MuskanWedsDevesh',
+    hashtag: '#MuskanWedsSwastik',
   },
   date: {
     day: '2',
@@ -58,7 +58,7 @@ export const weddingDetails = {
     countryCodes: ['India +91', 'USA +1', 'UK +44', 'UAE +971'],
     phonePlaceholder: '98765 43210',
     defaultAttendingEvents: ['Sangeet', 'Haldi', 'Wedding'],
-    teamOptions: ['Team Muskan', 'Team Devesh', 'Team Both!'],
+    teamOptions: ['Team Muskan', 'Team Swastik', 'Team Both!'],
   },
   contact: {
     name: 'Shri D. S. Dubey',
