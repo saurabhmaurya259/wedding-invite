@@ -1,6 +1,8 @@
-# Wedding Invitation
+# Muskan & Swastik — AxiomForgeCo
 
-A responsive wedding invitation built with React and Vite. The current visual design and artwork live in `src/App.jsx`, `src/index.css`, `src/App.css`, and `public/wedding-art/`.
+A responsive wedding invitation built with React and Vite.
+
+**Developed by Saurabh Maurya · AxiomForgeCo** — [axiomforgeco.org](https://axiomforgeco.org/). The current visual design and artwork live in `src/App.jsx`, `src/index.css`, `src/App.css`, and `public/wedding-art/`.
 
 ## Local development
 
