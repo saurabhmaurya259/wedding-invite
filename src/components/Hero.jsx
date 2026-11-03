@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
+import { weddingDetails } from '../data/weddingDetails';
 
 export default function Hero() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -14,13 +15,13 @@ export default function Hero() {
     setIsPlaying(!isPlaying);
   };
 
-  // Base URL for the reference theme assets
-  const baseUrl = "https://inviteutsav.com/wp-content/themes/inviteutsav/assets/templates/siyaram-raghukul/images";
+  const { baseUrl, backgroundMusic } = weddingDetails.assets;
+  const { brideName, groomName } = weddingDetails.couple;
 
   return (
     <section className="relative h-screen w-full overflow-hidden bg-[#fffdf9] flex flex-col items-center justify-start pt-32 md:pt-48">
-      {/* Background Music from the reference site */}
-      <audio ref={audioRef} loop src="https://inviteutsav.com/wp-content/themes/inviteutsav/assets/music/marriage/marriage-music-004.mp3" />
+      {/* Wedding background music */}
+      <audio ref={audioRef} loop src={backgroundMusic} />
       
       <button 
         onClick={toggleAudio} 
@@ -46,9 +47,9 @@ export default function Hero() {
       {/* Foreground Typography */}
       <div className="relative z-20 text-center flex flex-col items-center">
         <h1 className="text-7xl md:text-9xl font-script text-[#4a0d0d] flex flex-col items-center leading-none">
-          <span>Muskan</span>
+          <span>{brideName}</span>
           <span className="text-5xl md:text-7xl text-[#d4af37] my-2">&amp;</span>
-          <span>Devesh</span>
+          <span>{groomName}</span>
         </h1>
       </div>
     </section>
