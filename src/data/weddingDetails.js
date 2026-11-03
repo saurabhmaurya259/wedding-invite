@@ -40,7 +40,7 @@ export const weddingDetails = {
       address: 'Godadih - Raipur Road Near Mahadev Ghat, Bridge, Changurabhata, Raipur, Chhattisgarh',
       mapLink: 'https://maps.app.goo.gl/7hMsBULV72HHqies8',
       icsStart: '20261202T053000Z', icsEnd: '20261202T073000Z',
-      gcal: 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Haldi&dates=20261202T053000Z/20261202T073000Z&details=https://muskanwedsdevesh.inviteutsav.com/&location=Ps+Club+Royale,+Raipur,+Chhattisgarh',
+      gcal: 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Haldi&dates=20261202T053000Z/20261202T073000Z&details=Wedding invitation by Saurabh Maurya - AxiomForgeCo&location=Ps+Club+Royale,+Raipur,+Chhattisgarh',
       outlook: 'https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=Haldi&startdt=2026-12-02T05:30:00Z&enddt=2026-12-02T07:30:00Z&location=Ps+Club+Royale,+Raipur',
     },
     {
@@ -49,7 +49,7 @@ export const weddingDetails = {
       address: 'Godadih - Raipur Road Near Mahadev Ghat, Bridge, Changurabhata, Raipur, Chhattisgarh',
       mapLink: 'https://maps.app.goo.gl/7hMsBULV72HHqies8',
       icsStart: '20261202T123000Z', icsEnd: '20261202T143000Z',
-      gcal: 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Wedding&dates=20261202T123000Z/20261202T143000Z&details=https://muskanwedsdevesh.inviteutsav.com/&location=Ps+Club+Royale,+Raipur,+Chhattisgarh',
+      gcal: 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Wedding&dates=20261202T123000Z/20261202T143000Z&details=Wedding invitation by Saurabh Maurya - AxiomForgeCo&location=Ps+Club+Royale,+Raipur,+Chhattisgarh',
       outlook: 'https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=Wedding&startdt=2026-12-02T12:30:00Z&enddt=2026-12-02T14:30:00Z&location=Ps+Club+Royale,+Raipur',
     },
   ],
