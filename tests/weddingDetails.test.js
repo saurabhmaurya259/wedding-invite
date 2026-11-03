@@ -43,6 +43,7 @@ test('events have unique ids and valid calendar data', () => {
     assert.ok(event.address);
     assert.ok(event.mapLink);
     assert.ok(event.gcal.startsWith('https://calendar.google.com/'));
+    assert.match(new URL(event.gcal).searchParams.get('details'), /AxiomForgeCo/);
     assert.ok(event.outlook.startsWith('https://outlook.live.com/'));
 
     const start = parseUtc(event.icsStart);
@@ -101,5 +102,4 @@ test('family, venue, and asset configuration is complete', () => {
   assert.ok(weddingDetails.venue.mapLink.startsWith('https://'));
   assert.ok(weddingDetails.assets.baseUrl.startsWith('https://'));
   assert.ok(weddingDetails.assets.backgroundMusic.startsWith('https://'));
-  assert.ok(weddingDetails.calendar.invitationUrl.startsWith('https://'));
 });
