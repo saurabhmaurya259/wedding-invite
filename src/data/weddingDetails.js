@@ -31,7 +31,7 @@ export const weddingDetails = {
       address: 'Godadih - Raipur Road Near Mahadev Ghat, Bridge, Changurabhata, Raipur, Chhattisgarh',
       mapLink: 'https://maps.app.goo.gl/7hMsBULV72HHqies8',
       icsStart: '20261201T133000Z', icsEnd: '20261201T153000Z',
-      gcal: 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Sangeet&dates=20261201T133000Z/20261201T153000Z&details=https://muskanwedsdevesh.inviteutsav.com/&location=Ps+Club+Royale,+Raipur,+Chhattisgarh',
+      gcal: 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Sangeet&dates=20261201T133000Z/20261201T153000Z&details=Wedding+invitation+by+Saurabh+Maurya+-+AxiomForgeCo&location=Ps+Club+Royale,+Raipur,+Chhattisgarh',
       outlook: 'https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=Sangeet&startdt=2026-12-01T13:30:00Z&enddt=2026-12-01T15:30:00Z&location=Ps+Club+Royale,+Raipur',
     },
     {
@@ -67,7 +67,6 @@ export const weddingDetails = {
     whatsapp: '919876543210',
   },
   calendar: {
-    invitationUrl: 'https://muskanwedsdevesh.inviteutsav.com/',
     timeZone: 'Asia/Kolkata',
   },
   assets: {
